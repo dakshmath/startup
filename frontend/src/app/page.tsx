@@ -4,8 +4,17 @@ import { useState, useEffect } from 'react'
 import { GetStartedTab } from '@/components/tabs/get-started-tab'
 import { IntelligenceTab } from '@/components/tabs/intelligence-tab'
 import {
-  MessageSquare, CreditCard, Settings, Menu, X,
-  User, Lock, Mail, ChevronRight, Sparkles, BarChart3, Star
+  MessageSquare,
+  CreditCard,
+  Settings,
+  Menu,
+  X,
+  User,
+  ChevronRight,
+  Sparkles,
+  BarChart3,
+  Star,
+  Mail,
 } from 'lucide-react'
 import { firebaseAuth } from '@/lib/firebase'
 import { authApi } from '@/lib/api'
@@ -13,11 +22,11 @@ import { useRouter } from 'next/navigation'
 
 // Mock data for sidebar
 const mockConversations = [
-  { id: 1, title: "AI-Powered Food Delivery App", preview: "On-demand delivery service with AI route optimization...", timestamp: "2 hours ago", status: "completed" },
-  { id: 2, title: "Sustainable Fashion Marketplace", preview: "E-commerce platform for eco-friendly brands...", timestamp: "5 hours ago", status: "analyzing" },
-  { id: 3, title: "Smart Home Security System", preview: "IoT-based home monitoring with AI...", timestamp: "1 day ago", status: "completed" },
-  { id: 4, title: "Mental Health Teletherapy Platform", preview: "Virtual counseling with AI matching...", timestamp: "2 days ago", status: "completed" },
-  { id: 5, title: "Blockchain Supply Chain Solution", preview: "Transparent tracking for global logistics...", timestamp: "3 days ago", status: "failed" },
+  { id: 1, title: 'AI-Powered Food Delivery App', preview: 'On-demand delivery service with AI route optimization...', timestamp: '2 hours ago', status: 'completed' },
+  { id: 2, title: 'Sustainable Fashion Marketplace', preview: 'E-commerce platform for eco-friendly brands...', timestamp: '5 hours ago', status: 'analyzing' },
+  { id: 3, title: 'Smart Home Security System', preview: 'IoT-based home monitoring with AI...', timestamp: '1 day ago', status: 'completed' },
+  { id: 4, title: 'Mental Health Teletherapy Platform', preview: 'Virtual counseling with AI matching...', timestamp: '2 days ago', status: 'completed' },
+  { id: 5, title: 'Blockchain Supply Chain Solution', preview: 'Transparent tracking for global logistics...', timestamp: '3 days ago', status: 'failed' },
 ]
 
 export default function Home() {
@@ -188,7 +197,7 @@ export default function Home() {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
                 <input
                   name="password"
                   type="password"
@@ -224,39 +233,39 @@ export default function Home() {
     )
   }
 
-  // ⭐⭐⭐ DASHBOARD UI (FULLY FIXED LAYOUT) ⭐⭐⭐
+  // DASHBOARD
   return (
     <div className="min-h-screen flex bg-white dark:bg-black">
 
       {/* SIDEBAR */}
       <aside
         className={`${
-          sidebarOpen ? 'w-80' : 'w-0'
+          sidebarOpen ? 'w-64' : 'w-0'
         } transition-all duration-300 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 overflow-hidden flex-shrink-0`}
       >
-        <div className="h-full overflow-y-auto">
-
-          {/* New Chat Button */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+        <div className="h-full flex flex-col">
+          {/* New Chat */}
+          <div className="p-3 border-b border-gray-200 dark:border-gray-800">
             <button
               onClick={() => {
                 setActiveTab('chat')
                 setSelectedConversation(null)
               }}
-              className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="w-full flex items-center justify-between px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              <MessageSquare className="h-4 w-4" />
-              <span className="font-medium">New Analysis</span>
+              <span className="flex items-center space-x-2">
+                <MessageSquare className="h-4 w-4" />
+                <span className="text-sm font-medium">New Analysis</span>
+              </span>
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Conversations List */}
-          <div className="p-2">
-            <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 px-2">
+          {/* Conversations */}
+          <div className="flex-1 overflow-y-auto p-2">
+            <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 px-2">
               Recent Analyses
             </h3>
-
             <div className="space-y-1">
               {mockConversations.map((conversation) => (
                 <button
@@ -265,19 +274,18 @@ export default function Home() {
                     setSelectedConversation(conversation.id)
                     setActiveTab('chat')
                   }}
-                  className={`w-full text-left p-3 rounded-lg transition-all group ${
+                  className={`w-full text-left p-2 rounded-lg transition-all group ${
                     selectedConversation === conversation.id
                       ? 'bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600'
                       : 'hover:bg-gray-100 dark:hover:bg-gray-800 border border-transparent'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-1">
-                    <h4 className="text-sm font-medium text-gray-900 dark:text-white truncate pr-2">
+                    <h4 className="text-xs font-medium text-gray-900 dark:text-white truncate pr-2">
                       {conversation.title}
                     </h4>
-
                     <div
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
                         conversation.status === 'completed'
                           ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                           : conversation.status === 'analyzing'
@@ -288,12 +296,10 @@ export default function Home() {
                       {conversation.status}
                     </div>
                   </div>
-
-                  <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-2">
                     {conversation.preview}
                   </p>
-
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
                     {conversation.timestamp}
                   </p>
                 </button>
@@ -303,40 +309,36 @@ export default function Home() {
         </div>
       </aside>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN */}
       <main className="flex-1 flex flex-col overflow-hidden">
 
         {/* HEADER */}
         <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-          <div className="flex items-center justify-between h-16 px-4">
+          <div className="grid grid-cols-3 items-center h-14 px-4">
 
-            {/* Left */}
-            <div className="flex items-center space-x-4">
+            {/* Left: Sidebar toggle */}
+            <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
                 className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
                 {sidebarOpen ? (
-                  <X className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                  <X className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                 ) : (
-                  <Menu className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                  <Menu className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                 )}
               </button>
-
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                Market Intelligence
-              </h1>
             </div>
 
-            {/* Nav */}
-            <nav className="hidden md:flex items-center space-x-1">
+            {/* Center: Tabs */}
+            <nav className="flex items-center justify-center space-x-1">
               {tabs.map((tab) => {
                 const Icon = tab.icon
                 return (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                       activeTab === tab.id
                         ? 'bg-black text-white dark:bg-white dark:text-black'
                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -349,123 +351,138 @@ export default function Home() {
               })}
             </nav>
 
-            {/* User Menu */}
-            <div className="flex items-center space-x-3">
+            {/* Right: Profile + Settings */}
+            <div className="flex items-center justify-end space-x-2">
               <button
                 onClick={() => router.push('/settings')}
                 className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
-                <Settings className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <Settings className="h-4 w-4 text-gray-600 dark:text-gray-400" />
               </button>
-
               <button
                 onClick={() => router.push('/profile')}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
-                <User className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <User className="h-4 w-4 text-gray-600 dark:text-gray-400" />
               </button>
             </div>
+
           </div>
         </header>
 
-        {/* TAB CONTENT */}
-        <div className="flex-1 overflow-y-auto p-6">
+        {/* CONTENT */}
+        <div className="flex-1 flex flex-col overflow-hidden">
 
           {/* CHAT TAB */}
           {activeTab === 'chat' && (
-            <div className="max-w-4xl mx-auto">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                  Start Your Market Analysis
-                </h2>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Describe your startup idea and get instant AI-powered market insights
-                </p>
-              </div>
+            <div className="flex-1 flex flex-col items-center overflow-hidden">
+              <div className="w-full max-w-3xl flex-1 flex flex-col px-4 py-2 min-h-0">
 
-              <GetStartedTab />
+                {/* Compact hero */}
+                <div className="text-center mb-2">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    Start Your Market Analysis
+                  </h2>
+                </div>
+                {/* Chat body */}
+                <div className="flex-1 min-h-0 overflow-hidden">
+                  <GetStartedTab />
+                </div>
+
+              </div>
             </div>
           )}
 
           {/* INTELLIGENCE TAB */}
           {activeTab === 'intelligence' && (
-            <div className="max-w-6xl mx-auto">
-              <IntelligenceTab />
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="max-w-6xl mx-auto">
+                <IntelligenceTab />
+              </div>
             </div>
           )}
 
-                          {/* PRICING TAB */}
-                          {activeTab === 'pricing' && (
-                <div className="max-w-6xl mx-auto">
-                  <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                      Choose Your Plan
-                    </h2>
-                    <p className="text-lg text-gray-600 dark:text-gray-300">
-                      Unlock powerful market intelligence features
-                    </p>
+          {/* PRICING TAB */}
+          {activeTab === 'pricing' && (
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="max-w-6xl mx-auto">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                    Choose Your Plan
+                  </h2>
+                  <p className="text-lg text-gray-600 dark:text-gray-300">
+                    Unlock powerful market intelligence features
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                  {/* Starter */}
+                  <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <h3 className="text-xl font-bold mb-1">Starter</h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">Perfect for early validation</p>
+                    <div className="text-3xl font-bold mb-4">
+                      $0<span className="text-lg text-gray-500">/month</span>
+                    </div>
+                    <ul className="space-y-2 mb-6 text-sm">
+                      <li className="flex items-center text-green-600">✓ 3 ideas per month</li>
+                      <li className="flex items-center text-green-600">✓ Basic analysis</li>
+                      <li className="flex items-center text-green-600">✓ Email support</li>
+                      <li className="flex items-center text-gray-400">✗ Advanced insights</li>
+                      <li className="flex items-center text-gray-400">✗ API access</li>
+                    </ul>
+                    <button className="w-full py-2.5 px-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium">
+                      Get Started
+                    </button>
                   </div>
 
-                  <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                    {/* Free Plan */}
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all hover:-translate-y-1">
-                      <h3 className="text-xl font-bold mb-2">Starter</h3>
-                      <p className="text-gray-600 dark:text-gray-300 mb-6">Perfect for early validation</p>
-                      <div className="text-3xl font-bold mb-6">$0<span className="text-lg text-gray-500">/month</span></div>
-                      <ul className="space-y-3 mb-8">
-                        <li className="flex items-center text-green-600">✓ 3 ideas per month</li>
-                        <li className="flex items-center text-green-600">✓ Basic analysis</li>
-                        <li className="flex items-center text-green-600">✓ Email support</li>
-                        <li className="flex items-center text-gray-400">✗ Advanced insights</li>
-                        <li className="flex items-center text-gray-400">✗ API access</li>
-                      </ul>
-                      <button className="w-full py-3 px-6 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        Get Started
-                      </button>
+                  {/* Growth */}
+                  <div className="bg-black text-white rounded-2xl p-6 transform scale-105 shadow-2xl relative">
+                    <div className="absolute -top-3 -right-3 bg-white text-black text-xs font-bold px-3 py-1 rounded-full">
+                      RECOMMENDED
                     </div>
+                    <h3 className="text-xl font-bold mb-1">Growth</h3>
+                    <p className="text-gray-300 mb-4 text-sm">For scaling startups</p>
+                    <div className="text-3xl font-bold mb-4">
+                      $49<span className="text-lg text-gray-400">/month</span>
+                    </div>
+                    <ul className="space-y-2 mb-6 text-sm">
+                      <li className="flex items-center">✓ Unlimited ideas</li>
+                      <li className="flex items-center">✓ Advanced analysis</li>
+                      <li className="flex items-center">✓ Priority support</li>
+                      <li className="flex items-center">✓ Custom reports</li>
+                      <li className="flex items-center">✓ API access</li>
+                    </ul>
+                    <button className="w-full py-2.5 px-4 rounded-lg bg-white text-black font-bold hover:bg-gray-100 transition-colors text-sm">
+                      Start Free Trial
+                    </button>
+                  </div>
 
-                    {/* Pro Plan */}
-                    <div className="bg-black text-white rounded-2xl p-8 transform scale-105 shadow-2xl relative">
-                      <div className="absolute -top-4 -right-4 bg-white text-black text-sm font-bold px-3 py-1 rounded-full">
-                        RECOMMENDED
-                      </div>
-                      <h3 className="text-xl font-bold mb-2">Growth</h3>
-                      <p className="text-gray-300 mb-6">For scaling startups</p>
-                      <div className="text-3xl font-bold mb-6">$49<span className="text-lg text-gray-400">/month</span></div>
-                      <ul className="space-y-3 mb-8">
-                        <li className="flex items-center">✓ Unlimited ideas</li>
-                        <li className="flex items-center">✓ Advanced analysis</li>
-                        <li className="flex items-center">✓ Priority support</li>
-                        <li className="flex items-center">✓ Custom reports</li>
-                        <li className="flex items-center">✓ API access</li>
-                      </ul>
-                      <button className="w-full py-3 px-6 rounded-lg bg-white text-black font-bold hover:bg-gray-100 transition-colors">
-                        Start Free Trial
-                      </button>
+                  {/* Enterprise */}
+                  <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div className="flex items-center mb-1">
+                      <h3 className="text-xl font-bold">Enterprise</h3>
+                      <Star className="h-5 w-5 text-yellow-400 ml-2" />
                     </div>
-
-                    {/* Enterprise Plan */}
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all hover:-translate-y-1">
-                      <div className="flex items-center mb-2">
-                        <h3 className="text-xl font-bold">Enterprise</h3>
-                        <Star className="h-5 w-5 text-yellow-400 ml-2" />
-                      </div>
-                      <p className="text-gray-600 dark:text-gray-300 mb-6">For high-growth companies</p>
-                      <div className="text-3xl font-bold mb-6">$199<span className="text-lg text-gray-500">/month</span></div>
-                      <ul className="space-y-3 mb-8">
-                        <li className="flex items-center text-green-600">✓ Everything in Growth</li>
-                        <li className="flex items-center text-green-600">✓ Team collaboration</li>
-                        <li className="flex items-center text-green-600">✓ Custom integrations</li>
-                        <li className="flex items-center text-green-600">✓ Dedicated support</li>
-                        <li className="flex items-center text-green-600">✓ SLA guarantee</li>
-                      </ul>
-                      <button className="w-full py-3 px-6 rounded-lg bg-black text-white font-bold hover:bg-gray-800 transition-colors">
-                        Contact Sales
-                      </button>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">For high-growth companies</p>
+                    <div className="text-3xl font-bold mb-4">
+                      $199<span className="text-lg text-gray-500">/month</span>
                     </div>
+                    <ul className="space-y-2 mb-6 text-sm">
+                      <li className="flex items-center text-green-600">✓ Everything in Growth</li>
+                      <li className="flex items-center text-green-600">✓ Team collaboration</li>
+                      <li className="flex items-center text-green-600">✓ Custom integrations</li>
+                      <li className="flex items-center text-green-600">✓ Dedicated support</li>
+                      <li className="flex items-center text-green-600">✓ SLA guarantee</li>
+                    </ul>
+                    <button className="w-full py-2.5 px-4 rounded-lg bg-black text-white font-bold hover:bg-gray-800 transition-colors text-sm">
+                      Contact Sales
+                    </button>
                   </div>
                 </div>
-              )}
+              </div>
+            </div>
+          )}
+
         </div>
       </main>
     </div>
