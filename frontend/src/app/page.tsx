@@ -122,8 +122,8 @@ export default function Home() {
   // AUTH LOADING SCREEN
   if (isAuthenticated === null) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-foreground text-xl">Loading...</div>
       </div>
     )
   }
@@ -131,20 +131,20 @@ export default function Home() {
   // AUTH SCREEN
   if (isAuthenticated === false) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
-              <Sparkles className="h-12 w-12 text-blue-500" />
+              <Sparkles className="h-12 w-12 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">Market Intelligence</h1>
-            <p className="text-gray-400">AI-powered startup analysis platform</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Market Intelligence</h1>
+            <p className="text-muted-foreground">AI-powered startup analysis platform</p>
           </div>
 
           <button
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-full flex items-center justify-center space-x-3 p-3 bg-white text-black rounded-lg hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center space-x-3 p-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -157,15 +157,15 @@ export default function Home() {
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-700"></div>
+              <div className="w-full border-t border-border"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-gray-900 text-gray-400">Or continue with email</span>
+              <span className="px-2 bg-card text-muted-foreground">Or continue with email</span>
             </div>
           </div>
 
           {error && (
-            <div className="p-3 bg-red-900/50 border border-red-800 rounded-lg text-red-200 text-sm">
+            <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
               {error}
             </div>
           )}
@@ -181,28 +181,28 @@ export default function Home() {
             className="space-y-4"
           >
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Email</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <input
                   name="email"
                   type="email"
                   required
-                  className="w-full pl-10 pr-4 py-3 bg-black border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-600 focus:bg-gray-950 transition-all"
+                  className="w-full pl-10 pr-4 py-3 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-ring focus:bg-accent transition-all"
                   placeholder="you@example.com"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+              <label className="block text-sm font-medium text-foreground mb-2">Password</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <input
                   name="password"
                   type="password"
                   required
-                  className="w-full pl-10 pr-12 py-3 bg-black border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-600 focus:bg-gray-950 transition-all"
+                  className="w-full pl-10 pr-12 py-3 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-ring focus:bg-accent transition-all"
                   placeholder="••••••••••"
                 />
               </div>
@@ -211,18 +211,18 @@ export default function Home() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 bg-white text-black font-semibold rounded-lg hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 px-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Loading...' : (isSignUp ? 'Sign Up' : 'Sign In')}
             </button>
           </form>
 
           <div className="text-center mt-4">
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
               <button
                 onClick={() => setIsSignUp(!isSignUp)}
-                className="text-gray-300 hover:text-white font-medium transition-colors"
+                className="text-foreground hover:text-primary font-medium transition-colors"
               >
                 {isSignUp ? 'Sign in' : 'Sign up'}
               </button>
@@ -235,23 +235,23 @@ export default function Home() {
 
   // DASHBOARD
   return (
-    <div className="min-h-screen flex bg-white dark:bg-black">
+    <div className="min-h-screen flex bg-background">
 
       {/* SIDEBAR */}
       <aside
         className={`${
           sidebarOpen ? 'w-64' : 'w-0'
-        } transition-all duration-300 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 overflow-hidden flex-shrink-0`}
+        } transition-all duration-300 bg-card border-r border-border overflow-hidden flex-shrink-0`}
       >
         <div className="h-full flex flex-col">
           {/* New Chat */}
-          <div className="p-3 border-b border-gray-200 dark:border-gray-800">
+          <div className="p-3 border-b border-border">
             <button
               onClick={() => {
                 setActiveTab('chat')
                 setSelectedConversation(null)
               }}
-              className="w-full flex items-center justify-between px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="w-full flex items-center justify-between px-3 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
             >
               <span className="flex items-center space-x-2">
                 <MessageSquare className="h-4 w-4" />
@@ -263,7 +263,7 @@ export default function Home() {
 
           {/* Conversations */}
           <div className="flex-1 overflow-y-auto p-2">
-            <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 px-2">
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">
               Recent Analyses
             </h3>
             <div className="space-y-1">
@@ -276,30 +276,30 @@ export default function Home() {
                   }}
                   className={`w-full text-left p-2 rounded-lg transition-all group ${
                     selectedConversation === conversation.id
-                      ? 'bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-800 border border-transparent'
+                      ? 'bg-secondary border border-border'
+                      : 'hover:bg-accent border border-transparent'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-1">
-                    <h4 className="text-xs font-medium text-gray-900 dark:text-white truncate pr-2">
+                    <h4 className="text-xs font-medium text-foreground truncate pr-2">
                       {conversation.title}
                     </h4>
                     <div
                       className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
                         conversation.status === 'completed'
-                          ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                          ? 'bg-green-100 text-green-700'
                           : conversation.status === 'analyzing'
-                          ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'
-                          : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-red-100 text-red-700'
                       }`}
                     >
                       {conversation.status}
                     </div>
                   </div>
-                  <p className="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-2">
+                  <p className="text-[11px] text-muted-foreground line-clamp-2">
                     {conversation.preview}
                   </p>
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
+                  <p className="text-[10px] text-muted-foreground mt-1">
                     {conversation.timestamp}
                   </p>
                 </button>
@@ -313,19 +313,19 @@ export default function Home() {
       <main className="flex-1 flex flex-col overflow-hidden">
 
         {/* HEADER */}
-        <header className="border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
+        <header className="border-b border-border bg-card">
           <div className="grid grid-cols-3 items-center h-14 px-4">
 
             {/* Left: Sidebar toggle */}
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-lg hover:bg-accent transition-colors"
               >
                 {sidebarOpen ? (
-                  <X className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                  <X className="h-4 w-4 text-muted-foreground" />
                 ) : (
-                  <Menu className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                  <Menu className="h-4 w-4 text-muted-foreground" />
                 )}
               </button>
             </div>
@@ -340,8 +340,8 @@ export default function Home() {
                     onClick={() => setActiveTab(tab.id as any)}
                     className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                       activeTab === tab.id
-                        ? 'bg-black text-white dark:bg-white dark:text-black'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -355,15 +355,15 @@ export default function Home() {
             <div className="flex items-center justify-end space-x-2">
               <button
                 onClick={() => router.push('/settings')}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-lg hover:bg-accent transition-colors"
               >
-                <Settings className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <Settings className="h-4 w-4 text-muted-foreground" />
               </button>
               <button
                 onClick={() => router.push('/profile')}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="p-2 rounded-full hover:bg-accent transition-colors"
               >
-                <User className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <User className="h-4 w-4 text-muted-foreground" />
               </button>
             </div>
 
@@ -380,7 +380,7 @@ export default function Home() {
 
                 {/* Compact hero */}
                 <div className="text-center mb-2">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-lg font-semibold text-foreground">
                     Start Your Market Analysis
                   </h2>
                 </div>
@@ -407,43 +407,43 @@ export default function Home() {
             <div className="flex-1 overflow-y-auto px-4 py-4">
               <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h2 className="text-3xl font-bold text-foreground mb-2">
                     Choose Your Plan
                   </h2>
-                  <p className="text-lg text-gray-600 dark:text-gray-300">
+                  <p className="text-lg text-muted-foreground">
                     Unlock powerful market intelligence features
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                   {/* Starter */}
-                  <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all hover:-translate-y-1">
+                  <div className="bg-card rounded-2xl p-6 border border-border hover:shadow-lg transition-all hover:-translate-y-1">
                     <h3 className="text-xl font-bold mb-1">Starter</h3>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">Perfect for early validation</p>
+                    <p className="text-muted-foreground mb-4 text-sm">Perfect for early validation</p>
                     <div className="text-3xl font-bold mb-4">
-                      $0<span className="text-lg text-gray-500">/month</span>
+                      $0<span className="text-lg text-muted-foreground">/month</span>
                     </div>
                     <ul className="space-y-2 mb-6 text-sm">
                       <li className="flex items-center text-green-600">✓ 3 ideas per month</li>
                       <li className="flex items-center text-green-600">✓ Basic analysis</li>
                       <li className="flex items-center text-green-600">✓ Email support</li>
-                      <li className="flex items-center text-gray-400">✗ Advanced insights</li>
-                      <li className="flex items-center text-gray-400">✗ API access</li>
+                      <li className="flex items-center text-destructive">✗ Advanced insights</li>
+                      <li className="flex items-center text-destructive">✗ API access</li>
                     </ul>
-                    <button className="w-full py-2.5 px-4 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium">
+                    <button className="w-full py-2.5 px-4 rounded-lg border border-border hover:bg-accent transition-colors text-sm font-medium">
                       Get Started
                     </button>
                   </div>
 
                   {/* Growth */}
-                  <div className="bg-black text-white rounded-2xl p-6 transform scale-105 shadow-2xl relative">
-                    <div className="absolute -top-3 -right-3 bg-white text-black text-xs font-bold px-3 py-1 rounded-full">
+                  <div className="bg-primary text-primary-foreground rounded-2xl p-6 transform scale-105 shadow-2xl relative">
+                    <div className="absolute -top-3 -right-3 bg-card text-foreground text-xs font-bold px-3 py-1 rounded-full">
                       RECOMMENDED
                     </div>
                     <h3 className="text-xl font-bold mb-1">Growth</h3>
-                    <p className="text-gray-300 mb-4 text-sm">For scaling startups</p>
+                    <p className="text-primary-foreground mb-4 text-sm">For scaling startups</p>
                     <div className="text-3xl font-bold mb-4">
-                      $49<span className="text-lg text-gray-400">/month</span>
+                      $49<span className="text-lg text-primary-foreground/80">/month</span>
                     </div>
                     <ul className="space-y-2 mb-6 text-sm">
                       <li className="flex items-center">✓ Unlimited ideas</li>
@@ -452,20 +452,20 @@ export default function Home() {
                       <li className="flex items-center">✓ Custom reports</li>
                       <li className="flex items-center">✓ API access</li>
                     </ul>
-                    <button className="w-full py-2.5 px-4 rounded-lg bg-white text-black font-bold hover:bg-gray-100 transition-colors text-sm">
+                    <button className="w-full py-2.5 px-4 rounded-lg bg-card text-foreground font-bold hover:bg-accent transition-colors text-sm">
                       Start Free Trial
                     </button>
                   </div>
 
                   {/* Enterprise */}
-                  <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all hover:-translate-y-1">
+                  <div className="bg-card rounded-2xl p-6 border border-border hover:shadow-lg transition-all hover:-translate-y-1">
                     <div className="flex items-center mb-1">
                       <h3 className="text-xl font-bold">Enterprise</h3>
                       <Star className="h-5 w-5 text-yellow-400 ml-2" />
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">For high-growth companies</p>
+                    <p className="text-muted-foreground mb-4 text-sm">For high-growth companies</p>
                     <div className="text-3xl font-bold mb-4">
-                      $199<span className="text-lg text-gray-500">/month</span>
+                      $199<span className="text-lg text-muted-foreground">/month</span>
                     </div>
                     <ul className="space-y-2 mb-6 text-sm">
                       <li className="flex items-center text-green-600">✓ Everything in Growth</li>
@@ -474,7 +474,7 @@ export default function Home() {
                       <li className="flex items-center text-green-600">✓ Dedicated support</li>
                       <li className="flex items-center text-green-600">✓ SLA guarantee</li>
                     </ul>
-                    <button className="w-full py-2.5 px-4 rounded-lg bg-black text-white font-bold hover:bg-gray-800 transition-colors text-sm">
+                    <button className="w-full py-2.5 px-4 rounded-lg bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors text-sm">
                       Contact Sales
                     </button>
                   </div>

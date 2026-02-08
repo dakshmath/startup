@@ -13,19 +13,19 @@ export default function SettingsPage() {
   const { isDarkMode, toggleDarkMode } = useTheme()
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-8 px-4">
 
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Settings</h1>
-            <p className="text-gray-600 dark:text-gray-400">Manage your application preferences</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Settings</h1>
+            <p className="text-muted-foreground">Manage your application preferences</p>
           </div>
 
           <button
             onClick={() => router.push('/')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
           >
             Back to Intelligence
           </button>
@@ -35,23 +35,23 @@ export default function SettingsPage() {
         <div className="space-y-6">
 
           {/* Notifications */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center space-x-3 mb-4">
-              <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notifications</h2>
+              <Bell className="w-5 h-5 text-muted-foreground" />
+              <h2 className="text-lg font-semibold text-foreground">Notifications</h2>
             </div>
 
             <div className="space-y-4">
               {/* Push Notifications */}
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Push Notifications</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Receive notifications about your ideas</p>
+                  <p className="font-medium text-foreground">Push Notifications</p>
+                  <p className="text-sm text-muted-foreground">Receive notifications about your ideas</p>
                 </div>
                 <button
                   onClick={() => setNotifications(!notifications)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    notifications ? 'bg-blue-600' : 'bg-gray-200'
+                    notifications ? 'bg-primary' : 'bg-secondary'
                   }`}
                 >
                   <span
@@ -65,13 +65,13 @@ export default function SettingsPage() {
               {/* Email Updates */}
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900 dark:text-white">Email Updates</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Get weekly summaries and insights</p>
+                  <p className="font-medium text-foreground">Email Updates</p>
+                  <p className="text-sm text-muted-foreground">Get weekly summaries and insights</p>
                 </div>
                 <button
                   onClick={() => setEmailUpdates(!emailUpdates)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    emailUpdates ? 'bg-blue-600' : 'bg-gray-200'
+                    emailUpdates ? 'bg-primary' : 'bg-secondary'
                   }`}
                 >
                   <span
@@ -85,22 +85,22 @@ export default function SettingsPage() {
           </div>
 
           {/* Appearance */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center space-x-3 mb-4">
-              <Palette className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Appearance</h2>
+              <Palette className="w-5 h-5 text-muted-foreground" />
+              <h2 className="text-lg font-semibold text-foreground">Appearance</h2>
             </div>
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium text-gray-900 dark:text-white">Dark Mode</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Toggle dark theme</p>
+                <p className="font-medium text-foreground">Dark Mode</p>
+                <p className="text-sm text-muted-foreground">Toggle dark theme</p>
               </div>
 
               <button
                 onClick={toggleDarkMode}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  isDarkMode ? 'bg-blue-600' : 'bg-gray-200'
+                  isDarkMode ? 'bg-primary' : 'bg-secondary'
                 }`}
               >
                 <span
@@ -113,63 +113,63 @@ export default function SettingsPage() {
           </div>
 
           {/* Privacy */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center space-x-3 mb-4">
-              <Shield className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Privacy & Security</h2>
+              <Shield className="w-5 h-5 text-muted-foreground" />
+              <h2 className="text-lg font-semibold text-foreground">Privacy & Security</h2>
             </div>
 
             <div className="space-y-3">
-              <button className="w-full text-left px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <button className="w-full text-left px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors">
                 <p className="font-medium">Change Password</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Update your account password</p>
+                <p className="text-sm text-muted-foreground">Update your account password</p>
               </button>
 
-              <button className="w-full text-left px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <button className="w-full text-left px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors">
                 <p className="font-medium">Two-Factor Authentication</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Add an extra layer of security</p>
+                <p className="text-sm text-muted-foreground">Add an extra layer of security</p>
               </button>
 
-              <button className="w-full text-left px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <button className="w-full text-left px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors">
                 <p className="font-medium">Privacy Settings</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Manage your data and privacy</p>
+                <p className="text-sm text-muted-foreground">Manage your data and privacy</p>
               </button>
             </div>
           </div>
 
           {/* Support */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center space-x-3 mb-4">
-              <HelpCircle className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Support</h2>
+              <HelpCircle className="w-5 h-5 text-muted-foreground" />
+              <h2 className="text-lg font-semibold text-foreground">Support</h2>
             </div>
 
             <div className="space-y-3">
-              <button className="w-full text-left px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <button className="w-full text-left px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors">
                 <p className="font-medium">Help Center</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Get help with using the platform</p>
+                <p className="text-sm text-muted-foreground">Get help with using the platform</p>
               </button>
 
-              <button className="w-full text-left px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <button className="w-full text-left px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors">
                 <p className="font-medium">Contact Support</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Reach out to our support team</p>
+                <p className="text-sm text-muted-foreground">Reach out to our support team</p>
               </button>
 
-              <button className="w-full text-left px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+              <button className="w-full text-left px-4 py-3 text-foreground hover:bg-accent rounded-lg transition-colors">
                 <p className="font-medium">FAQ</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Frequently asked questions</p>
+                <p className="text-sm text-muted-foreground">Frequently asked questions</p>
               </button>
             </div>
           </div>
 
           {/* Danger Zone */}
-          <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-6 border border-red-200 dark:border-red-800">
-            <h2 className="text-lg font-semibold text-red-900 dark:text-red-400 mb-4">Danger Zone</h2>
+          <div className="bg-destructive/10 rounded-xl p-6 border border-destructive/20">
+            <h2 className="text-lg font-semibold text-destructive mb-4">Danger Zone</h2>
 
             <div className="space-y-3">
-              <button className="w-full text-left px-4 py-3 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors">
+              <button className="w-full text-left px-4 py-3 text-destructive hover:bg-destructive/10 rounded-lg transition-colors">
                 <p className="font-medium">Delete Account</p>
-                <p className="text-sm text-red-600 dark:text-red-500">Permanently delete your account and data</p>
+                <p className="text-sm text-destructive/80">Permanently delete your account and data</p>
               </button>
             </div>
           </div>

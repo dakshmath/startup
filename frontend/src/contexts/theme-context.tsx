@@ -47,7 +47,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Prevent rendering until theme is known
   if (isDarkMode === null) {
-    return <div className="min-h-screen bg-gray-50" />
+    return <div className="min-h-screen bg-background" />
   }
 
   return (

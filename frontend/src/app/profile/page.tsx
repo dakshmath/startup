@@ -94,19 +94,19 @@ export default function ProfilePage() {
     : 'U'
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-8 px-4">
         
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile</h1>
-            <p className="text-gray-600">Manage your account settings and preferences</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Profile</h1>
+            <p className="text-muted-foreground">Manage your account settings and preferences</p>
           </div>
 
           <button
             onClick={() => router.push('/')}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
           >
             Back to Intelligence
           </button>
@@ -118,8 +118,8 @@ export default function ProfilePage() {
           <div className="lg:col-span-2 space-y-6">
 
             {/* User Info Card */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">User Information</h2>
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <h2 className="text-lg font-semibold text-foreground mb-4">User Information</h2>
               
               <div className="flex items-center space-x-4 mb-6 relative">
 
@@ -129,16 +129,16 @@ export default function ProfilePage() {
                     <img
                       src={photoURL}
                       alt="Profile"
-                      className="w-20 h-20 rounded-full object-cover border border-gray-300"
+                      className="w-20 h-20 rounded-full object-cover border border-border"
                     />
                   ) : (
-                    <div className="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center text-2xl font-bold text-gray-700">
+                    <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center text-2xl font-bold text-muted-foreground">
                       {initials}
                     </div>
                   )}
 
                   {/* Upload Button */}
-                  <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-1 rounded-full cursor-pointer hover:bg-blue-700 transition">
+                  <label className="absolute bottom-0 right-0 bg-primary text-primary-foreground p-1 rounded-full cursor-pointer hover:bg-primary/90 transition">
                     <Camera className="w-4 h-4" />
                     <input
                       type="file"
@@ -150,36 +150,36 @@ export default function ProfilePage() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">{userName}</h3>
-                  <p className="text-gray-600">{userEmail}</p>
+                  <h3 className="text-xl font-semibold text-foreground">{userName}</h3>
+                  <p className="text-muted-foreground">{userEmail}</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Display Name</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Display Name</label>
                   <input
                     type="text"
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-input rounded-lg bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Email</label>
                   <input
                     type="email"
                     value={userEmail}
                     onChange={(e) => setUserEmail(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-input rounded-lg bg-background text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
                   />
                 </div>
 
                 <button
                   onClick={handleSave}
                   disabled={saving || uploading}
-                  className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="w-full py-2 px-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
                 >
                   {saving || uploading ? 'Saving...' : 'Save Changes'}
                 </button>
@@ -192,38 +192,38 @@ export default function ProfilePage() {
           <div className="space-y-6">
 
             {/* Current Plan */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Current Plan</h2>
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <h2 className="text-lg font-semibold text-foreground mb-4">Current Plan</h2>
               
               <div className="text-center py-4">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl mb-4">
-                  <CreditCard className="w-8 h-8 text-blue-600" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-2xl mb-4">
+                  <CreditCard className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{currentPlan}</h3>
-                <p className="text-gray-600 mb-4">5 ideas per month</p>
+                <h3 className="text-xl font-bold text-foreground mb-2">{currentPlan}</h3>
+                <p className="text-muted-foreground mb-4">5 ideas per month</p>
                 
-                <button className="w-full px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                <button className="w-full px-4 py-2 bg-foreground text-background rounded-lg hover:bg-foreground/90 transition-colors">
                   Upgrade Plan
                 </button>
               </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+            <div className="bg-card rounded-xl p-6 border border-border">
+              <h2 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h2>
               
               <div className="space-y-3">
                 <button
                   onClick={() => router.push('/settings')}
-                  className="w-full flex items-center space-x-3 px-4 py-3 text-left text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                  className="w-full flex items-center space-x-3 px-4 py-3 text-left text-foreground hover:bg-accent rounded-lg transition-colors"
                 >
-                  <Settings className="w-5 h-5 text-gray-600" />
+                  <Settings className="w-5 h-5 text-muted-foreground" />
                   <span>Account Settings</span>
                 </button>
                 
                 <button 
                   onClick={handleSignOut}
-                  className="w-full flex items-center space-x-3 px-4 py-3 text-left text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="w-full flex items-center space-x-3 px-4 py-3 text-left text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                 >
                   <LogOut className="w-5 h-5" />
                   <span>Sign Out</span>

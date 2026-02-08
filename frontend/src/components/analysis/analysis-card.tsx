@@ -13,27 +13,27 @@ interface AnalysisCardProps {
 }
 
 const colorClasses = {
-  blue: 'bg-blue-100 text-blue-600',
-  red: 'bg-red-100 text-red-600',
-  green: 'bg-green-100 text-green-600',
-  purple: 'bg-purple-100 text-purple-600',
-  orange: 'bg-orange-100 text-orange-600',
+  blue: 'bg-primary/10 text-primary',
+  red: 'bg-destructive/10 text-destructive',
+  green: 'bg-green-100 text-green-700',
+  purple: 'bg-accent/10 text-accent',
+  orange: 'bg-orange-100 text-orange-700',
 }
 
 export function AnalysisCard({ title, icon: Icon, data, color, locked = false }: AnalysisCardProps) {
   if (locked) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6 opacity-60">
+      <div className="bg-card rounded-lg border border-border p-6 opacity-60">
         <div className="flex items-center space-x-3 mb-4">
           <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${colorClasses[color]}`}>
             <Icon className="h-5 w-5" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+          <h3 className="text-lg font-semibold text-foreground">{title}</h3>
         </div>
         <div className="space-y-3">
-          <div className="h-4 bg-gray-200 rounded animate-pulse" />
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
+          <div className="h-4 bg-muted rounded animate-pulse" />
+          <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
+          <div className="h-4 bg-muted rounded animate-pulse w-1/2" />
         </div>
       </div>
     )
@@ -41,15 +41,15 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
 
   if (!data) {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-6">
+      <div className="bg-card rounded-lg border border-border p-6">
         <div className="flex items-center space-x-3 mb-4">
           <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${colorClasses[color]}`}>
             <Icon className="h-5 w-5" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+          <h3 className="text-lg font-semibold text-foreground">{title}</h3>
         </div>
         <div className="text-center py-8">
-          <p className="text-gray-500">No data available</p>
+          <p className="text-muted-foreground">No data available</p>
         </div>
       </div>
     )
@@ -62,15 +62,15 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
           <div className="space-y-4">
             {data.market_size && (
               <div>
-                <p className="text-sm text-gray-500">Market Size</p>
-                <p className="text-xl font-semibold text-gray-900">
+                <p className="text-sm text-muted-foreground">Market Size</p>
+                <p className="text-xl font-semibold text-foreground">
                   ${formatNumber(data.market_size)}
                 </p>
               </div>
             )}
             {data.growth_rate && (
               <div>
-                <p className="text-sm text-gray-500">Growth Rate</p>
+                <p className="text-sm text-muted-foreground">Growth Rate</p>
                 <p className="text-xl font-semibold text-green-600">
                   {formatPercentage(data.growth_rate)}
                 </p>
@@ -78,11 +78,11 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
             )}
             {data.momentum_score && (
               <div>
-                <p className="text-sm text-gray-500">Momentum Score</p>
+                <p className="text-sm text-muted-foreground">Momentum Score</p>
                 <div className="flex items-center space-x-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                  <div className="flex-1 bg-muted rounded-full h-2">
                     <div
-                      className="bg-blue-600 h-2 rounded-full"
+                      className="bg-primary h-2 rounded-full"
                       style={{ width: `${data.momentum_score}%` }}
                     />
                   </div>
@@ -92,12 +92,12 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
             )}
             {data.current_trends && (
               <div>
-                <p className="text-sm text-gray-500 mb-2">Current Trends</p>
+                <p className="text-sm text-muted-foreground mb-2">Current Trends</p>
                 <div className="flex flex-wrap gap-1">
                   {data.current_trends.slice(0, 3).map((trend: string, index: number) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary"
                     >
                       {trend}
                     </span>
@@ -113,11 +113,11 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
           <div className="space-y-4">
             {data.competition_intensity && (
               <div>
-                <p className="text-sm text-gray-500">Competition Intensity</p>
+                <p className="text-sm text-muted-foreground">Competition Intensity</p>
                 <div className="flex items-center space-x-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                  <div className="flex-1 bg-muted rounded-full h-2">
                     <div
-                      className="bg-red-600 h-2 rounded-full"
+                      className="bg-destructive h-2 rounded-full"
                       style={{ width: `${data.competition_intensity}%` }}
                     />
                   </div>
@@ -127,13 +127,13 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
             )}
             {data.competitors && (
               <div>
-                <p className="text-sm text-gray-500 mb-2">Top Competitors</p>
+                <p className="text-sm text-muted-foreground mb-2">Top Competitors</p>
                 <div className="space-y-2">
                   {data.competitors.slice(0, 3).map((competitor: any, index: number) => (
                     <div key={index} className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-900">{competitor.name}</span>
+                      <span className="text-sm font-medium text-foreground">{competitor.name}</span>
                       {competitor.market_share && (
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-muted-foreground">
                           {formatPercentage(competitor.market_share)}
                         </span>
                       )}
@@ -150,17 +150,17 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
           <div className="space-y-4">
             {data.average_funding && (
               <div>
-                <p className="text-sm text-gray-500">Average Funding</p>
-                <p className="text-xl font-semibold text-gray-900">
+                <p className="text-sm text-muted-foreground">Average Funding</p>
+                <p className="text-xl font-semibold text-foreground">
                   ${formatNumber(data.average_funding)}
                 </p>
               </div>
             )}
             {data.funding_difficulty && (
               <div>
-                <p className="text-sm text-gray-500">Funding Difficulty</p>
+                <p className="text-sm text-muted-foreground">Funding Difficulty</p>
                 <div className="flex items-center space-x-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                  <div className="flex-1 bg-muted rounded-full h-2">
                     <div
                       className="bg-green-600 h-2 rounded-full"
                       style={{ width: `${data.funding_difficulty}%` }}
@@ -172,12 +172,12 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
             )}
             {data.active_investors && (
               <div>
-                <p className="text-sm text-gray-500 mb-2">Active Investors</p>
+                <p className="text-sm text-muted-foreground mb-2">Active Investors</p>
                 <div className="flex flex-wrap gap-1">
                   {data.active_investors.slice(0, 3).map((investor: string, index: number) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700"
                     >
                       {investor}
                     </span>
@@ -193,11 +193,11 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
           <div className="space-y-4">
             {data.sentiment_score && (
               <div>
-                <p className="text-sm text-gray-500">Sentiment Score</p>
+                <p className="text-sm text-muted-foreground">Sentiment Score</p>
                 <div className="flex items-center space-x-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                  <div className="flex-1 bg-muted rounded-full h-2">
                     <div
-                      className="bg-purple-600 h-2 rounded-full"
+                      className="bg-accent h-2 rounded-full"
                       style={{ width: `${data.sentiment_score}%` }}
                     />
                   </div>
@@ -207,11 +207,11 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
             )}
             {data.adoption_potential && (
               <div>
-                <p className="text-sm text-gray-500">Adoption Potential</p>
+                <p className="text-sm text-muted-foreground">Adoption Potential</p>
                 <div className="flex items-center space-x-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2">
+                  <div className="flex-1 bg-muted rounded-full h-2">
                     <div
-                      className="bg-purple-600 h-2 rounded-full"
+                      className="bg-accent h-2 rounded-full"
                       style={{ width: `${data.adoption_potential}%` }}
                     />
                   </div>
@@ -221,10 +221,10 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
             )}
             {data.key_concerns && (
               <div>
-                <p className="text-sm text-gray-500 mb-2">Key Concerns</p>
+                <p className="text-sm text-muted-foreground mb-2">Key Concerns</p>
                 <div className="space-y-1">
                   {data.key_concerns.slice(0, 2).map((concern: string, index: number) => (
-                    <div key={index} className="text-sm text-gray-600">
+                    <div key={index} className="text-sm text-muted-foreground">
                       • {concern}
                     </div>
                   ))}
@@ -239,12 +239,12 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
           <div className="space-y-4">
             {data.market_projection && (
               <div>
-                <p className="text-sm text-gray-500 mb-2">Market Projection</p>
+                <p className="text-sm text-muted-foreground mb-2">Market Projection</p>
                 <div className="space-y-1">
                   {data.market_projection.year_1 && (
                     <div className="flex justify-between text-sm">
                       <span>Year 1:</span>
-                      <span className="font-medium">${formatNumber(data.market_projection.year_1)}</span>
+                      <span className="font-medium text-foreground">${formatNumber(data.market_projection.year_1)}</span>
                     </div>
                   )}
                   {data.market_projection.year_3 && (
@@ -264,12 +264,12 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
             )}
             {data.technology_trends && (
               <div>
-                <p className="text-sm text-gray-500 mb-2">Technology Trends</p>
+                <p className="text-sm text-muted-foreground mb-2">Technology Trends</p>
                 <div className="flex flex-wrap gap-1">
                   {data.technology_trends.slice(0, 3).map((trend: string, index: number) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800"
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700"
                     >
                       {trend}
                     </span>
@@ -283,19 +283,19 @@ export function AnalysisCard({ title, icon: Icon, data, color, locked = false }:
       default:
         return (
           <div className="space-y-4">
-            <p className="text-sm text-gray-500">Analysis data available</p>
+            <p className="text-sm text-muted-foreground">Analysis data available</p>
           </div>
         )
     }
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-card rounded-lg border border-border p-6">
       <div className="flex items-center space-x-3 mb-4">
         <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${colorClasses[color]}`}>
           <Icon className="h-5 w-5" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        <h3 className="text-lg font-semibold text-foreground">{title}</h3>
       </div>
       {renderContent()}
     </div>
