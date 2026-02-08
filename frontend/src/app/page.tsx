@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { GetStartedTabEnterprise } from '@/components/tabs/get-started-tab-enterprise'
 import { IntelligenceTab } from '@/components/tabs/intelligence-tab'
+import { PricingCards } from '@/components/pricing/pricing-cards'
 import {
   MessageSquare,
   CreditCard,
@@ -405,80 +406,8 @@ export default function Home() {
           {/* PRICING TAB */}
           {activeTab === 'pricing' && (
             <div className="flex-1 overflow-y-auto px-4 py-4">
-              <div className="max-w-6xl mx-auto">
-                <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold text-foreground mb-2">
-                    Choose Your Plan
-                  </h2>
-                  <p className="text-lg text-muted-foreground">
-                    Unlock powerful market intelligence features
-                  </p>
-                </div>
-
-                <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                  {/* Starter */}
-                  <div className="bg-card rounded-2xl p-6 border border-border hover:shadow-lg transition-all hover:-translate-y-1">
-                    <h3 className="text-xl font-bold mb-1">Starter</h3>
-                    <p className="text-muted-foreground mb-4 text-sm">Perfect for early validation</p>
-                    <div className="text-3xl font-bold mb-4">
-                      $0<span className="text-lg text-muted-foreground">/month</span>
-                    </div>
-                    <ul className="space-y-2 mb-6 text-sm">
-                      <li className="flex items-center text-green-600">✓ 3 ideas per month</li>
-                      <li className="flex items-center text-green-600">✓ Basic analysis</li>
-                      <li className="flex items-center text-green-600">✓ Email support</li>
-                      <li className="flex items-center text-destructive">✗ Advanced insights</li>
-                      <li className="flex items-center text-destructive">✗ API access</li>
-                    </ul>
-                    <button className="w-full py-2.5 px-4 rounded-lg border border-border hover:bg-accent transition-colors text-sm font-medium">
-                      Get Started
-                    </button>
-                  </div>
-
-                  {/* Growth */}
-                  <div className="bg-primary text-primary-foreground rounded-2xl p-6 transform scale-105 shadow-2xl relative">
-                    <div className="absolute -top-3 -right-3 bg-card text-foreground text-xs font-bold px-3 py-1 rounded-full">
-                      RECOMMENDED
-                    </div>
-                    <h3 className="text-xl font-bold mb-1">Growth</h3>
-                    <p className="text-primary-foreground mb-4 text-sm">For scaling startups</p>
-                    <div className="text-3xl font-bold mb-4">
-                      $49<span className="text-lg text-primary-foreground/80">/month</span>
-                    </div>
-                    <ul className="space-y-2 mb-6 text-sm">
-                      <li className="flex items-center">✓ Unlimited ideas</li>
-                      <li className="flex items-center">✓ Advanced analysis</li>
-                      <li className="flex items-center">✓ Priority support</li>
-                      <li className="flex items-center">✓ Custom reports</li>
-                      <li className="flex items-center">✓ API access</li>
-                    </ul>
-                    <button className="w-full py-2.5 px-4 rounded-lg bg-card text-foreground font-bold hover:bg-accent transition-colors text-sm">
-                      Start Free Trial
-                    </button>
-                  </div>
-
-                  {/* Enterprise */}
-                  <div className="bg-card rounded-2xl p-6 border border-border hover:shadow-lg transition-all hover:-translate-y-1">
-                    <div className="flex items-center mb-1">
-                      <h3 className="text-xl font-bold">Enterprise</h3>
-                      <Star className="h-5 w-5 text-yellow-400 ml-2" />
-                    </div>
-                    <p className="text-muted-foreground mb-4 text-sm">For high-growth companies</p>
-                    <div className="text-3xl font-bold mb-4">
-                      $199<span className="text-lg text-muted-foreground">/month</span>
-                    </div>
-                    <ul className="space-y-2 mb-6 text-sm">
-                      <li className="flex items-center text-green-600">✓ Everything in Growth</li>
-                      <li className="flex items-center text-green-600">✓ Team collaboration</li>
-                      <li className="flex items-center text-green-600">✓ Custom integrations</li>
-                      <li className="flex items-center text-green-600">✓ Dedicated support</li>
-                      <li className="flex items-center text-green-600">✓ SLA guarantee</li>
-                    </ul>
-                    <button className="w-full py-2.5 px-4 rounded-lg bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors text-sm">
-                      Contact Sales
-                    </button>
-                  </div>
-                </div>
+              <div className="max-w-7xl mx-auto">
+                <PricingCards />
               </div>
             </div>
           )}

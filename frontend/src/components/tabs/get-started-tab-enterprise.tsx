@@ -310,12 +310,19 @@ export function GetStartedTabEnterprise() {
                     <button
                       key={index}
                       onClick={() => setInputValue(`${prompt.title}: ${prompt.description}`)}
-                      className="p-4 bg-card border border-border rounded-xl hover:shadow-lg hover:bg-accent transition-all hover:-translate-y-1 text-left group animate-fade-in"
+                      className={`
+                        p-4 bg-card border-2 border-border rounded-xl hover:shadow-lg hover:-translate-y-1 text-left group animate-fade-in
+                        transition-all duration-300 ease-out
+                      `}
                       style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <span className="font-medium text-foreground">{prompt.title}</span>
-                        <div className="w-8 h-8 bg-muted rounded-lg flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                        <div className={`
+                          w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
+                          border-2 border-border
+                          group-hover:border-primary group-hover:bg-primary/10
+                        `}>
                           <Send className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       </div>
