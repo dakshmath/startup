@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { GetStartedTab } from '@/components/tabs/get-started-tab'
+import { GetStartedTabEnterprise } from '@/components/tabs/get-started-tab-enterprise'
 import { IntelligenceTab } from '@/components/tabs/intelligence-tab'
 import {
   MessageSquare,
@@ -386,7 +386,7 @@ export default function Home() {
                 </div>
                 {/* Chat body */}
                 <div className="flex-1 min-h-0 overflow-hidden">
-                  <GetStartedTab />
+                  <GetStartedTabEnterprise />
                 </div>
 
               </div>
