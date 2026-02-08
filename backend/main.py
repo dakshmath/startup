@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import api_router
 from app.core.config import settings
+from app.core.database import init_db
 
 app = FastAPI(
     title="Market Intelligence Platform",
@@ -28,3 +29,7 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+@app.on_event("startup") 
+def on_startup(): 
+    init_db()
