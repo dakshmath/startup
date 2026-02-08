@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Send, Brain, Loader2, TrendingUp, BarChart3, Target, AlertCircle, RotateCcw, Edit } from 'lucide-react'
+import { Send, Brain, Loader2, TrendingUp, BarChart3, Target, AlertCircle, RotateCcw, Edit, Mic} from 'lucide-react'
 import { ideasApi, chatApi } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
+import { useRef } from 'react'
+
 
 interface Message {
   id: string
@@ -167,6 +169,38 @@ export function GetStartedTabEnterprise() {
   const [error, setError] = useState('')
   const { toast } = useToast()
 
+  const [isRecording, setIsRecording] = useState(false)
+  const recognitionRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const SpeechRecognition =
+        (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition()
+        recognition.lang = "en-US"
+        recognition.interimResults = false
+        recognition.continuous = false
+
+        recognition.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript
+          setInputValue(transcript)
+        }
+
+        recognition.onerror = () => {
+          setIsRecording(false)
+        }
+
+        recognition.onend = () => {
+          setIsRecording(false)
+        }
+
+        recognitionRef.current = recognition
+      }
+    }
+  }, [])
+
   const analysisStages: AnalysisStage[] = [
     {
       id: 'market',
@@ -221,7 +255,7 @@ export function GetStartedTabEnterprise() {
       setCurrentStage('insights')
       await new Promise(resolve => setTimeout(resolve, 1500))
 
-      const response = await chatApi.sendMessage([
+      const response: { message: string; ideaId?: string } = await chatApi.sendMessage([
         ...messages.map(msg => ({ role: msg.role, content: msg.content })),
         userMessage
       ])
@@ -282,7 +316,7 @@ export function GetStartedTabEnterprise() {
   ]
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-gradient-to-br from-background via-background to-card/20">
+    <div className="flex-1 flex-col max-h-screen bg-background">
       
       {/* Empty State */}
       {messages.length === 0 && (
@@ -429,43 +463,67 @@ export function GetStartedTabEnterprise() {
         </div>
       )}
 
-      {/* Input Area */}
-      <div className="border-t border-border bg-card/50 backdrop-blur-sm p-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-end space-x-3">
-            <div className="flex-1 relative">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder={messages.length === 0 ? "Describe your startup idea for comprehensive analysis..." : "Ask follow-up questions..."}
-                className="w-full px-4 py-3 bg-background border border-input rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:border-ring focus:bg-accent focus:ring-2 focus:ring-ring/20 transition-all resize-none"
-                disabled={isLoading || isAnalyzing}
-              />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!inputValue.trim() || isLoading || isAnalyzing}
-                  className="p-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 shadow-lg"
-                >
-                  {isLoading || isAnalyzing ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>{isAnalyzing ? 'Analyzing...' : 'Processing...'}</span>
-                    </div>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4" />
-                      <span className="sr-only">Send message</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
+   {/* Input Area */}
+<div className="p-6">
+  <div className="max-w-4xl mx-auto">
+    <div className="flex items-center gap-3 bg-background backdrop-blur-xl border border-border rounded-full px-2.5 py-1.5 shadow-xl">
+
+    <button
+  className={`p-2 rounded-full transition ${
+    isRecording ? "bg-red-500 text-white" : "hover:bg-accent"
+  }`}
+  onClick={() => {
+    if (!recognitionRef.current) return
+
+    if (!isRecording) {
+      setIsRecording(true)
+      recognitionRef.current.start()
+    } else {
+      setIsRecording(false)
+      recognitionRef.current.stop()
+    }
+  }}
+>
+  <Mic className="w-5 h-5" />
+</button>
+
+      {/* Input */}
+      <input
+        type="text"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+        placeholder={
+          messages.length === 0
+            ? "Describe your startup idea..."
+            : "Ask follow-up questions..."
+        }
+        className="flex-1 bg-transparent outline-none text-foreground placeholder-muted-foreground"
+        disabled={isLoading || isAnalyzing}
+      />
+
+      {/* Send Button */}
+      <button
+        onClick={handleSendMessage}
+        disabled={!inputValue.trim() || isLoading || isAnalyzing}
+        className="p-3 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+      >
+        {isLoading || isAnalyzing ? (
+          <div className="flex items-center space-x-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span>{isAnalyzing ? 'Analyzing...' : 'Processing...'}</span>
           </div>
-        </div>
-      </div>
+        ) : (
+          <>
+            <Send className="h-4 w-4" />
+            <span className="sr-only">Send message</span>
+          </>
+        )}
+      </button>
+
     </div>
+  </div>
+</div>
+</div>  
   )
 }
