@@ -7,7 +7,7 @@ from app.services.auth import get_current_user
 from app.models.user import User
 from app.services.llm_service import LLMService
 
-router = APIRouter(prefix="/chat", tags=["chat"])
+router = APIRouter(tags=["chat"])
 
 class ChatMessage(BaseModel):
     role: str
