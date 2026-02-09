@@ -23,6 +23,7 @@ import {
   Zap,
   Shield,
   CheckCircle,
+  TrendingUp,
 } from 'lucide-react'
 import { firebaseAuth } from '@/lib/firebase'
 import { authApi } from '@/lib/api'
@@ -320,186 +321,197 @@ export default function Home() {
     )
   }
 
-  // DASHBOARD
-  return (
-    <div className="min-h-screen flex bg-background">
+// DASHBOARD
+return (
+  <div className="min-h-screen flex bg-background">
 
-      {/* SIDEBAR */}
-      <aside
-        className={`${
-          sidebarOpen ? 'w-64' : 'w-0'
-        } transition-all duration-300 bg-card border-r border-border overflow-hidden flex-shrink-0`}
-      >
-        <div className="h-full flex flex-col">
-          {/* New Chat */}
-          <div className="p-3 border-b border-border">
+    {/* SIDEBAR */}
+    <aside
+      className={`${
+        sidebarOpen ? 'w-64' : 'w-0'
+      } transition-all duration-300 bg-card/95 backdrop-blur-sm border-r border-border/50 overflow-hidden flex-shrink-0 hidden sm:block`}
+    >
+      <div className="h-full flex flex-col">
+        {/* New Chat */}
+        <div className="p-4">
+          <button
+            onClick={() => {
+              setActiveTab('chat')
+              setSelectedConversation(null)
+            }}
+            className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground rounded-xl hover:from-primary/95 hover:to-primary/85 transition-all duration-300 shadow-lg hover:shadow-xl group"
+          >
+            <span className="flex items-center space-x-3">
+              <MessageSquare className="h-5 w-5 group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-semibold">New Analysis</span>
+            </span>
+            <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+
+        {/* Conversations */}
+        <div className="flex-1 overflow-y-auto p-3">
+          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3 px-3 flex items-center space-x-2">
+            <div className="w-2 h-2 rounded-full bg-primary/60"></div>
+            <span>Recent Analyses</span>
+          </h3>
+          <div className="space-y-2">
+            {mockConversations.map((conversation) => (
+              <button
+                key={conversation.id}
+                onClick={() => {
+                  setSelectedConversation(conversation.id)
+                  setActiveTab('chat')
+                }}
+                className={`w-full text-left p-3 rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1 ${
+                  selectedConversation === conversation.id
+                    ? 'bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/30 shadow-md'
+                    : 'bg-card/50 border border-border/30 hover:bg-card/80 hover:border-primary/20'
+                }`}
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="text-xs font-semibold text-foreground truncate pr-2 group-hover:text-primary transition-colors">
+                    {conversation.title}
+                  </h4>
+                  <div
+                    className={`px-2 py-1 rounded-full text-[10px] font-medium transition-all duration-300 ${
+                      conversation.status === 'completed'
+                        ? 'bg-green-100/80 text-green-700 group-hover:bg-green-100'
+                        : conversation.status === 'analyzing'
+                        ? 'bg-yellow-100/80 text-yellow-700 group-hover:bg-yellow-100'
+                        : 'bg-red-100/80 text-red-700 group-hover:bg-red-100'
+                    }`}
+                  >
+                    {conversation.status}
+                  </div>
+                </div>
+                <p className="text-[11px] text-muted-foreground line-clamp-2 mb-2 group-hover:text-foreground/80 transition-colors">
+                  {conversation.preview}
+                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] text-muted-foreground/70 group-hover:text-muted-foreground transition-colors">
+                    {conversation.timestamp}
+                  </p>
+                  <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button className="p-1 rounded-lg hover:bg-accent/50 transition-colors">
+                      <TrendingUp className="h-3 w-3 text-muted-foreground" />
+                    </button>
+                    <button className="p-1 rounded-lg hover:bg-accent/50 transition-colors">
+                      <BarChart3 className="h-3 w-3 text-muted-foreground" />
+                    </button>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    {/* MAIN */}
+    <main className="flex-1 flex flex-col overflow-hidden">
+
+      {/* HEADER */}
+      <header className="border-b border-border bg-card">
+        <div className="grid grid-cols-3 items-center h-14 px-4">
+
+          {/* Left: Sidebar toggle */}
+          <div className="flex items-center">
             <button
-              onClick={() => {
-                setActiveTab('chat')
-                setSelectedConversation(null)
-              }}
-              className="w-full flex items-center justify-between px-3 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 rounded-lg hover:bg-accent transition-colors"
             >
-              <span className="flex items-center space-x-2">
-                <MessageSquare className="h-4 w-4" />
-                <span className="text-sm font-medium">New Analysis</span>
-              </span>
-              <ChevronRight className="h-4 w-4" />
+              {sidebarOpen ? (
+                <X className="h-4 w-4 text-muted-foreground" />
+              ) : (
+                <Menu className="h-4 w-4 text-muted-foreground" />
+              )}
             </button>
           </div>
 
-          {/* Conversations */}
-          <div className="flex-1 overflow-y-auto p-2">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">
-              Recent Analyses
-            </h3>
-            <div className="space-y-1">
-              {mockConversations.map((conversation) => (
+          {/* Center: Tabs */}
+          <nav className="flex items-center justify-center space-x-1">
+            {tabs.map((tab) => {
+              const Icon = tab.icon
+              return (
                 <button
-                  key={conversation.id}
-                  onClick={() => {
-                    setSelectedConversation(conversation.id)
-                    setActiveTab('chat')
-                  }}
-                  className={`w-full text-left p-2 rounded-lg transition-all group ${
-                    selectedConversation === conversation.id
-                      ? 'bg-secondary border border-border'
-                      : 'hover:bg-accent border border-transparent'
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                    activeTab === tab.id
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
                 >
-                  <div className="flex items-start justify-between mb-1">
-                    <h4 className="text-xs font-medium text-foreground truncate pr-2">
-                      {conversation.title}
-                    </h4>
-                    <div
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
-                        conversation.status === 'completed'
-                          ? 'bg-green-100 text-green-700'
-                          : conversation.status === 'analyzing'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-red-100 text-red-700'
-                      }`}
-                    >
-                      {conversation.status}
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground line-clamp-2">
-                    {conversation.preview}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground mt-1">
-                    {conversation.timestamp}
-                  </p>
+                  <Icon className="h-4 w-4" />
+                  <span>{tab.label}</span>
                 </button>
-              ))}
-            </div>
+              )
+            })}
+          </nav>
+
+          {/* Right: Profile + Settings */}
+          <div className="flex items-center justify-end space-x-2">
+            <button
+              onClick={() => router.push('/settings')}
+              className="p-2 rounded-lg hover:bg-accent transition-colors"
+            >
+              <Settings className="h-4 w-4 text-muted-foreground" />
+            </button>
+            <button
+              onClick={() => router.push('/profile')}
+              className="p-2 rounded-full hover:bg-accent transition-colors"
+            >
+              <User className="h-4 w-4 text-muted-foreground" />
+            </button>
           </div>
-        </div>
-      </aside>
-
-      {/* MAIN */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-
-        {/* HEADER */}
-        <header className="border-b border-border bg-card">
-          <div className="grid grid-cols-3 items-center h-14 px-4">
-
-            {/* Left: Sidebar toggle */}
-            <div className="flex items-center">
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                {sidebarOpen ? (
-                  <X className="h-4 w-4 text-muted-foreground" />
-                ) : (
-                  <Menu className="h-4 w-4 text-muted-foreground" />
-                )}
-              </button>
-            </div>
-
-            {/* Center: Tabs */}
-            <nav className="flex items-center justify-center space-x-1">
-              {tabs.map((tab) => {
-                const Icon = tab.icon
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                      activeTab === tab.id
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{tab.label}</span>
-                  </button>
-                )
-              })}
-            </nav>
-
-            {/* Right: Profile + Settings */}
-            <div className="flex items-center justify-end space-x-2">
-              <button
-                onClick={() => router.push('/settings')}
-                className="p-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                <Settings className="h-4 w-4 text-muted-foreground" />
-              </button>
-              <button
-                onClick={() => router.push('/profile')}
-                className="p-2 rounded-full hover:bg-accent transition-colors"
-              >
-                <User className="h-4 w-4 text-muted-foreground" />
-              </button>
-            </div>
-
-          </div>
-        </header>
-
-        {/* CONTENT */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-
-          {/* CHAT TAB */}
-          {activeTab === 'chat' && (
-            <div className="flex-1 flex flex-col items-center overflow-hidden">
-              <div className="w-full max-w-3xl flex-1 flex flex-col px-4 py-2 min-h-0">
-
-                {/* Compact hero */}
-                <div className="text-center mb-2">
-                  <h2 className="text-lg font-semibold text-foreground">
-                    Start Your Market Analysis
-                  </h2>
-                </div>
-                {/* Chat body */}
-                <div className="flex-1 min-h-0 overflow-hidden">
-                  <GetStartedTabEnterprise />
-                </div>
-
-              </div>
-            </div>
-          )}
-
-          {/* INTELLIGENCE TAB */}
-          {activeTab === 'intelligence' && (
-            <div className="flex-1 overflow-y-auto px-4 py-4">
-              <div className="max-w-6xl mx-auto">
-                <IntelligenceTab />
-              </div>
-            </div>
-          )}
-
-          {/* PRICING TAB */}
-          {activeTab === 'pricing' && (
-            <div className="flex-1 overflow-y-auto px-4 py-4">
-              <div className="max-w-7xl mx-auto">
-                <PricingCards />
-              </div>
-            </div>
-          )}
 
         </div>
-      </main>
-    </div>
-  )
+      </header>
+
+      {/* CONTENT */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+
+        {/* CHAT TAB */}
+        {activeTab === 'chat' && (
+          <div className="flex-1 flex flex-col items-center overflow-hidden">
+            <div className="w-full max-w-3xl flex-1 flex flex-col px-4 py-2 min-h-0">
+
+              {/* Compact hero */}
+              <div className="text-center mb-2">
+                <h2 className="text-lg font-semibold text-foreground">
+                  Start Your Market Analysis
+                </h2>
+              </div>
+              {/* Chat body */}
+              <div className="flex-1 min-h-0 overflow-hidden">
+                <GetStartedTabEnterprise />
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* INTELLIGENCE TAB */}
+        {activeTab === 'intelligence' && (
+          <div className="flex-1 overflow-y-auto px-4 py-4">
+            <div className="max-w-6xl mx-auto">
+              <IntelligenceTab />
+            </div>
+          </div>
+        )}
+
+        {/* PRICING TAB */}
+        {activeTab === 'pricing' && (
+          <div className="flex-1 overflow-y-auto px-4 py-4">
+            <div className="max-w-7xl mx-auto">
+              <PricingCards />
+            </div>
+          </div>
+        )}
+
+      </div>
+    </main>
+  </div>
+)
 }
