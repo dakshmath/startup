@@ -28,7 +28,7 @@ let storage: any
 try {
   app = initializeApp(firebaseConfig)
   auth = getAuth(app)
-  storage = getStorage(app)   // ⭐ FIXED — pass app here
+  storage = getStorage(app)
   googleProvider = new GoogleAuthProvider()
 
   googleProvider.addScope('email')

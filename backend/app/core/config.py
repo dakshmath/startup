@@ -3,8 +3,8 @@ from typing import Optional
 
 class Settings(BaseSettings):
     # Database
-    POSTGRES_URL: str = "postgresql://postgres:password@localhost:5432/startup_db"
-    
+    POSTGRES_URL: str = "postgresql://daksh:password@localhost:5432/startup"
+
     # Redis
     REDIS_URL: str = "redis://localhost:6379/0"
     
