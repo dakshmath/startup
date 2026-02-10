@@ -71,6 +71,17 @@ export const firebaseAuth = {
       throw new Error(error.message || 'Failed to sign up with email')
     }
   },
+  
+  sendPasswordReset: async (email: string) => {
+    if (!auth) throw new Error('Firebase auth not initialized')
+    try {
+      const { sendPasswordResetEmail } = await import('firebase/auth')
+      await sendPasswordResetEmail(auth, email)
+      return true
+    } catch (error: any) {
+      throw new Error(error.message || 'Failed to send password reset email')
+    }
+  },
 
   signOut: async () => {
     if (!auth) throw new Error('Firebase auth not initialized')
