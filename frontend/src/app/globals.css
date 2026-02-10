@@ -10,7 +10,6 @@
     --foreground: 240 10% 3.9%;
     --card: 0 0% 98%;
     --border: 240 5.9% 90%;
-    /* YOUR GREEN */
     --primary: 142 70% 45%; 
     --primary-foreground: 0 0% 100%;
     --muted: 240 4.8% 95.9%;
@@ -19,7 +18,7 @@
   }
 
   .dark {
-    --background: 240 10% 2%;    
+    --background: 240 10% 8%;    
     --foreground: 0 0% 98%;
     --card: 240 10% 4%;          
     --border: 240 5% 12%;       
