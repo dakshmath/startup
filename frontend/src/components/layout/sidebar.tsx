@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Clock, TrendingUp, BarChart3, Users, DollarSign, MessageSquare } from 'lucide-react'
+import { Clock, TrendingUp, BarChart3, Users, DollarSign, MessageSquare, Plus, Search } from 'lucide-react'
 import { useIdea } from '@/contexts/idea-context'
 import { formatDate } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -37,10 +37,23 @@ export function Sidebar({ open, onClose }: SidebarProps) {
       `}>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Idea History</h2>
-            <p className="text-sm text-gray-500 mt-1">Your analyzed startup ideas</p>
-          </div>
+<div className="p-4 space-y-3 border-b border-gray-100">
+  <div className="flex items-center justify-between px-1">
+    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">History</span>
+    <button className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+      <Search className="h-4 w-4 text-gray-400" />
+    </button>
+  </div>
+  <Button 
+    onClick={() => {
+      dispatch({ type: 'SET_CURRENT_IDEA', payload: null })
+      onClose()
+    }}
+    className="w-full bg-black text-white rounded-xl py-6 font-bold hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 shadow-sm"
+  >
+    <Plus className="h-4 w-4" /> New Idea
+  </Button>
+</div>
 
           {/* Ideas List */}
           <div className="flex-1 overflow-y-auto p-4 space-y-2">

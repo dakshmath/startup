@@ -25,7 +25,19 @@ interface AnalysisStage {
   isCompleted: boolean
 }
 
-// Enterprise-grade typing indicator
+export function GetStartedTabEnterprise() {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [inputValue, setInputValue] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [currentStage, setCurrentStage] = useState('')
+  const [error, setError] = useState('')
+  const { toast } = useToast()
+  const [isRecording, setIsRecording] = useState(false)
+  const recognitionRef = useRef<any>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+
 const TypingIndicator = ({ stage }: { stage?: string }) => {
   const [dots, setDots] = useState('.')
   const [pulseOpacity, setPulseOpacity] = useState(1)
@@ -159,18 +171,11 @@ const ErrorState = ({ error, onRetry, onEdit }: { error: string; onRetry: () => 
     </div>
   )
 }
-
-export function GetStartedTabEnterprise() {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [inputValue, setInputValue] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [currentStage, setCurrentStage] = useState('')
-  const [error, setError] = useState('')
-  const { toast } = useToast()
-
-  const [isRecording, setIsRecording] = useState(false)
-  const recognitionRef = useRef<any>(null)
+useEffect(() => {
+  if (scrollRef.current) {
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+  }
+}, [messages, isAnalyzing])
 
   useEffect(() => {
     if (typeof window !== "undefined") {
