@@ -95,3 +95,24 @@
     @apply text-gray-600;
   }
 }
+
+/* globals.css */
+@layer base {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px hsl(var(--background)) inset !important;
+    -webkit-text-fill-color: hsl(var(--foreground)) !important;
+        border: 1px solid hsl(var(--input)) !important;
+    
+    outline: none !important;
+    box-shadow: 0 0 0px 1000px hsl(var(--background)) inset, 0 0 0 0px transparent !important;
+    
+    transition: background-color 5000s ease-in-out 0s, border-color 0.2s ease;
+  }
+
+  input:-webkit-autofill:focus {
+    border-color: hsl(var(--primary)) !important;
+  }
+}
