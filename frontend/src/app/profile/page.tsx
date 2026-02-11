@@ -1,24 +1,26 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { User, Settings, CreditCard, LogOut, Camera, Sparkles, ArrowLeft, Crown, Star, TrendingUp } from 'lucide-react'
+import { User, Shield, ArrowLeft, Camera, Mail, Zap, LogOut, FileJson, ChevronRight } from 'lucide-react'
 import { firebaseAuth, storage } from '@/lib/firebase'
 import { useRouter } from 'next/navigation'
-import { updateProfile, updateEmail } from 'firebase/auth'
+import { updateProfile } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { useTheme } from '@/contexts/theme-context'
 
 export default function ProfilePage() {
   const router = useRouter()
-
+  const { isDarkMode } = useTheme()
+  
+  // --- STATE ---
+  const [activeTab, setActiveTab] = useState('general')
   const [userEmail, setUserEmail] = useState('')
   const [userName, setUserName] = useState('')
   const [photoURL, setPhotoURL] = useState<string | null>(null)
-  const [currentPlan, setCurrentPlan] = useState('Free')
   const [firebaseUser, setFirebaseUser] = useState<any>(null)
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
 
-  // Load user info from Firebase
   useEffect(() => {
     const unsubscribe = firebaseAuth.onAuthStateChanged((user: any) => {
       if (user) {
@@ -28,249 +30,231 @@ export default function ProfilePage() {
         setPhotoURL(user.photoURL || null)
       }
     })
-
     return () => unsubscribe()
   }, [])
 
-  // Upload profile picture
   const handlePhotoUpload = async (e: any) => {
     const file = e.target.files?.[0]
     if (!file || !firebaseUser) return
-
     try {
       setUploading(true)
-
       const storageRef = ref(storage, `profilePictures/${firebaseUser.uid}`)
       await uploadBytes(storageRef, file)
-
       const downloadURL = await getDownloadURL(storageRef)
       setPhotoURL(downloadURL)
-
       await updateProfile(firebaseUser, { photoURL: downloadURL })
     } catch (err) {
-      console.error('Error uploading photo:', err)
+      console.error(err)
     } finally {
       setUploading(false)
     }
   }
 
-  // Save profile changes
   const handleSaveProfile = async () => {
     if (!firebaseUser) return
-
     try {
       setSaving(true)
       await updateProfile(firebaseUser, { displayName: userName })
     } catch (err) {
-      console.error('Error updating profile:', err)
+      console.error(err)
     } finally {
       setSaving(false)
     }
   }
 
-  // Handle logout
   const handleLogout = async () => {
-    try {
-      await firebaseAuth.signOut()
-      router.push('/')
-    } catch (err) {
-      console.error('Error logging out:', err)
-    }
+    await firebaseAuth.signOut()
+    router.push('/')
   }
 
+  const navItems = [
+    { id: 'general', label: 'General', icon: User },
+    { id: 'security', label: 'Security', icon: Shield },
+  ]
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto py-8 px-4">
-
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
-            <User className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Profile</span>
-          </div>
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Manage Your Account
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Update your profile information and manage your subscription
-          </p>
-        </div>
-
-        {/* Back Button */}
-        <div className="text-center mb-12">
-          <button
+    <div className={`min-h-screen transition-colors duration-500 ${
+      isDarkMode ? 'bg-[#050505] text-white' : 'bg-zinc-50 text-zinc-900'
+    }`}>
+      {/* Top Navigation */}
+      <nav className={`border-b sticky top-0 z-50 transition-colors duration-500 ${
+        isDarkMode ? 'border-white/5 bg-black/50 backdrop-blur-xl' : 'border-zinc-200 bg-white/80 backdrop-blur-xl'
+      }`}>
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <button 
             onClick={() => router.push('/')}
-            className="inline-flex items-center space-x-2 px-6 py-3 bg-card border border-border rounded-xl hover:bg-accent transition-all duration-300 group shadow-lg hover:shadow-xl"
+            className={`flex items-center gap-2 text-sm transition-colors ${
+              isDarkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'
+            }`}
           >
-            <ArrowLeft className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-            <span className="text-foreground group-hover:text-primary transition-colors font-medium">Back to Dashboard</span>
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
           </button>
         </div>
+      </nav>
 
-        {/* MAIN PROFILE WRAPPER */}
-        <div className="space-y-8">
-
-          {/* Profile Card */}
-          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <User className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold text-foreground">Profile Information</h2>
+      <main className="max-w-5xl mx-auto px-6 py-12">
+        <div className="flex flex-col md:flex-row gap-12">
+          
+          {/* Sidebar Navigation */}
+          <div className="w-full md:w-64 space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-2xl font-bold tracking-tight">Account</h1>
+              <nav className="flex flex-col gap-1">
+                {navItems.map((item) => {
+                  const isActive = activeTab === item.id
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id)}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative ${
+                        isActive 
+                          ? 'text-primary' 
+                          : isDarkMode 
+                            ? 'text-zinc-400 hover:text-white hover:bg-white/5' 
+                            : 'text-zinc-500 hover:text-black hover:bg-zinc-100'
+                      }`}
+                    >
+                      {isActive && (
+                        <div className="absolute left-0 w-1 h-4 bg-primary rounded-full" />
+                      )}
+                      <item.icon className="w-4 h-4" />
+                      {item.label}
+                    </button>
+                  )
+                })}
+              </nav>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-8">
-              {/* Profile Picture */}
-              <div className="flex flex-col items-center">
-                <div className="relative group">
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-accent p-1">
-                    <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden">
+            {/* Plan Card */}
+            <div className={`p-5 rounded-[2rem] border transition-all ${
+              isDarkMode ? 'border-primary/20 bg-primary/5' : 'border-primary/10 bg-white shadow-sm'
+            }`}>
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className="w-4 h-4 text-primary" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Free Plan</span>
+              </div>
+              <p className="text-xs opacity-60 mb-4 font-medium">Unlock priority AI features.</p>
+              <button className="w-full py-2.5 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-lg shadow-primary/20">
+                Upgrade
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Content */}
+          <div className="flex-1">
+            
+            {/* GENERAL TAB */}
+            {activeTab === 'general' && (
+              <section className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className={`pb-4 border-b ${isDarkMode ? 'border-white/10' : 'border-zinc-200'}`}>
+                  <h3 className="text-xl font-bold">Profile Details</h3>
+                  <p className="text-sm opacity-60 mt-1">Manage how you appear to others.</p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-8 items-start">
+                  <div className="relative group">
+                    <div className={`w-24 h-24 rounded-full border overflow-hidden relative ${
+                      isDarkMode ? 'bg-zinc-900 border-white/10' : 'bg-white border-zinc-200 shadow-sm'
+                    }`}>
                       {photoURL ? (
-                        <img src={photoURL} alt="Profile" className="w-full h-full object-cover" />
+                        <img src={photoURL} alt="Avatar" className="w-full h-full object-cover" />
                       ) : (
-                        <User className="w-16 h-16 text-muted-foreground" />
+                        <div className="w-full h-full flex items-center justify-center opacity-20">
+                          <User className="w-10 h-10" />
+                        </div>
+                      )}
+                      {uploading && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                          <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                        </div>
                       )}
                     </div>
+                    <label className="absolute -bottom-1 -right-1 p-2 bg-primary text-white rounded-full cursor-pointer hover:scale-110 transition-transform shadow-xl">
+                      <Camera className="w-4 h-4" />
+                      <input type="file" onChange={handlePhotoUpload} className="hidden" />
+                    </label>
                   </div>
-                  <label className="absolute inset-0 w-32 h-32 rounded-full bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                    <Camera className="w-6 h-6 text-white" />
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handlePhotoUpload}
-                    className="hidden"
-                    id="photo-upload"
-                  />
-                  <label htmlFor="photo-upload" className="cursor-pointer">
-                    <div className="text-center mt-4">
-                      <button className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl">
-                        {uploading ? 'Uploading...' : 'Change Photo'}
-                      </button>
+
+                  <div className="flex-1 w-full space-y-6">
+                    <div className="grid grid-cols-1 gap-5">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest opacity-50 px-1">Display Name</label>
+                        <input 
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
+                          className={`w-full rounded-2xl px-4 py-3 text-sm outline-none transition-all border ${
+                            isDarkMode 
+                              ? 'bg-[#0A0A0A] border-white/5 focus:border-primary/50' 
+                              : 'bg-white border-zinc-200 focus:border-primary/50 shadow-sm'
+                          }`}
+                        />
+                      </div>
+                      <div className="space-y-2 opacity-60">
+                        <label className="text-[10px] font-black uppercase tracking-widest px-1">Email Address</label>
+                        <div className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm border ${
+                          isDarkMode ? 'bg-[#0A0A0A] border-white/5' : 'bg-zinc-100 border-zinc-200'
+                        }`}>
+                          <Mail className="w-4 h-4 opacity-30" />
+                          {userEmail}
+                        </div>
+                      </div>
                     </div>
-                  </label>
-                </div>
-              </div>
-
-              {/* Profile Form */}
-              <div className="flex-1 space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Display Name</label>
-                  <input
-                    type="text"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    className="w-full px-4 py-3 bg-background border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                    placeholder="Your name"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">Email Address</label>
-                  <input
-                    type="email"
-                    value={userEmail}
-                    disabled
-                    className="w-full px-4 py-3 bg-muted border border-border rounded-xl text-muted-foreground"
-                    placeholder="your@email.com"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">Email cannot be changed here</p>
-                </div>
-
-                <button
-                  onClick={handleSaveProfile}
-                  disabled={saving}
-                  className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-semibold shadow-lg hover:shadow-xl"
-                >
-                  {saving ? 'Saving...' : 'Save Changes'}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Subscription Status */}
-          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <CreditCard className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold text-foreground">Subscription Status</h2>
-            </div>
-
-            <div className="p-6 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl border border-primary/20">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center space-x-3">
-                  <div className="p-3 bg-primary/20 rounded-xl">
-                    <Crown className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-foreground text-xl">{currentPlan} Plan</p>
-                    <p className="text-muted-foreground">Active subscription</p>
+                    <button 
+                      onClick={handleSaveProfile}
+                      disabled={saving}
+                      className="px-6 py-3 bg-primary text-white text-xs font-bold rounded-2xl hover:scale-105 transition-all shadow-xl shadow-primary/20"
+                    >
+                      {saving ? 'Updating...' : 'Save Profile'}
+                    </button>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-primary">$0</p>
-                  <p className="text-sm text-muted-foreground">/month</p>
-                </div>
-              </div>
+              </section>
+            )}
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="flex items-center space-x-2">
-                  <Star className="w-4 h-4 text-primary" />
-                  <span className="text-sm text-foreground">Basic Analysis</span>
+            {/* SECURITY TAB */}
+            {activeTab === 'security' && (
+              <section className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className={`pb-4 border-b ${isDarkMode ? 'border-white/10' : 'border-zinc-200'}`}>
+                  <h3 className="text-xl font-bold">Account Security</h3>
+                  <p className="text-sm opacity-60 mt-1">Manage your access and data privacy.</p>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <TrendingUp className="w-4 h-4 text-primary" />
-                  <span className="text-sm text-foreground">3 Ideas/month</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                  <span className="text-sm text-foreground">Community Support</span>
-                </div>
-              </div>
 
-              <button
-                onClick={() => router.push('/pricing')}
-                className="w-full px-4 py-3 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-xl hover:from-primary/95 hover:to-accent/95 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
-              >
-                Upgrade to Pro
-              </button>
-            </div>
+                <div className="space-y-4">
+                  <button className={`w-full flex items-center justify-between p-6 rounded-3xl border transition-all group ${
+                    isDarkMode ? 'bg-[#0A0A0A] border-white/5 hover:border-primary/40' : 'bg-white border-zinc-200 hover:border-primary/40 shadow-sm'
+                  }`}>
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-primary/10 rounded-2xl text-primary">
+                        <FileJson className="w-5 h-5" />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-sm font-bold">Export Workspace</p>
+                        <p className="text-xs opacity-50">Download all your data as JSON.</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 opacity-20 group-hover:translate-x-1 group-hover:opacity-100 transition-all" />
+                  </button>
+
+                  <div className={`p-8 rounded-[2rem] border transition-all ${
+                    isDarkMode ? 'border-red-500/10 bg-red-500/5' : 'border-red-200 bg-red-50'
+                  }`}>
+                    <h4 className="text-xs font-black text-red-500 uppercase tracking-widest mb-4">Account Management</h4>
+                    <p className="text-sm opacity-60 mb-6 font-medium">Signing out will end your current session. You will need to log back in to access your projects.</p>
+                    <button 
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 px-6 py-3 bg-red-500 text-white text-xs font-bold rounded-xl hover:bg-red-600 transition-all"
+                    >
+                      <LogOut className="w-4 h-4" /> Sign Out
+                    </button>
+                  </div>
+                </div>
+              </section>
+            )}
+
           </div>
-
-          {/* Account Actions */}
-          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <Settings className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold text-foreground">Account Actions</h2>
-            </div>
-
-            <div className="space-y-4">
-              <button className="w-full text-left px-6 py-4 text-foreground hover:bg-accent rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-primary transition-colors">Export Data</p>
-                <p className="text-muted-foreground">Download all your data and analysis</p>
-              </button>
-
-              <button className="w-full text-left px-6 py-4 text-foreground hover:bg-accent rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-primary transition-colors">Account Settings</p>
-                <p className="text-muted-foreground">Manage privacy and security settings</p>
-              </button>
-
-              <button
-                onClick={handleLogout}
-                className="w-full text-left px-6 py-4 text-destructive hover:bg-destructive/10 rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1"
-              >
-                <p className="font-semibold text-lg group-hover:text-destructive/80 transition-colors">Sign Out</p>
-                <p className="text-destructive/70">Sign out of your account</p>
-              </button>
-            </div>
-          </div>
-
-        </div> {/* END MAIN WRAPPER */}
-
-      </div>
+        </div>
+      </main>
     </div>
   )
 }

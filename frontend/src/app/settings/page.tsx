@@ -1,205 +1,231 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Bell, Palette, CreditCard, Shield, User, HelpCircle, Sparkles, ArrowLeft, Settings } from 'lucide-react'
+import { Bell, Palette, Shield, ArrowLeft, Moon, Sun, Lock, CreditCard, FileText, Zap, Trash2, ChevronRight, CheckCircle2 } from 'lucide-react'
 import { useTheme } from '@/contexts/theme-context'
 import { useRouter } from 'next/navigation'
 
 export default function SettingsPage() {
   const router = useRouter()
-
-  const [notifications, setNotifications] = useState(true)
-  const [emailUpdates, setEmailUpdates] = useState(true)
   const { isDarkMode, toggleDarkMode } = useTheme()
 
+  // --- STATE ---
+  const [activeTab, setActiveTab] = useState('appearance')
+  const [notifications, setNotifications] = useState({
+    analysis: true,
+    security: true
+  })
+
+  // --- UI COMPONENTS ---
+  const Toggle = ({ enabled, onChange }: { enabled: boolean, onChange: () => void }) => (
+    <button
+      onClick={(e) => { e.preventDefault(); onChange(); }}
+      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 ease-in-out ${
+        enabled ? 'bg-primary' : 'bg-zinc-600'
+      }`}
+    >
+      <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-lg transition-transform duration-300 ease-in-out ${
+        enabled ? 'translate-x-6' : 'translate-x-1'
+      }`} />
+    </button>
+  )
+
+  const tabItems = [
+    { id: 'appearance', label: 'Appearance', icon: Palette },
+    { id: 'billing', label: 'Billing & Plan', icon: CreditCard },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'security', label: 'Security & Privacy', icon: Shield },
+  ]
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto py-8 px-4">
-
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
-            <Settings className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Settings</span>
-          </div>
-          <h1 className="text-4xl font-bold text-foreground mb-4">
-            Customize Your Experience
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Manage your application preferences and personalize your workspace
-          </p>
-        </div>
-
-        {/* Back Button */}
-        <div className="text-center mb-12">
-          <button
+    <div className={`min-h-screen transition-colors duration-500 ease-in-out ${
+      isDarkMode ? 'bg-[#050505] text-white' : 'bg-zinc-50 text-zinc-900'
+    }`}>
+      
+      {/* Top Navigation */}
+      <nav className={`border-b sticky top-0 z-50 transition-colors duration-500 ${
+        isDarkMode ? 'border-white/5 bg-black/60 backdrop-blur-xl' : 'border-zinc-200 bg-white/60 backdrop-blur-xl'
+      }`}>
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <button 
             onClick={() => router.push('/')}
-            className="inline-flex items-center space-x-2 px-6 py-3 bg-card border border-border rounded-xl hover:bg-accent transition-all duration-300 group shadow-lg hover:shadow-xl"
+            className={`flex items-center gap-2 text-sm transition-all group ${
+              isDarkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-black'
+            }`}
           >
-            <ArrowLeft className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-            <span className="text-foreground group-hover:text-primary transition-colors font-medium">Back to Dashboard</span>
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Dashboard
           </button>
         </div>
+      </nav>
 
-        {/* MAIN SETTINGS WRAPPER */}
-        <div className="space-y-8">
-
-          {/* Notifications */}
-          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <Bell className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold text-foreground">Notifications</h2>
-            </div>
-
-            <div className="space-y-6">
-              {/* Push Notifications */}
-              <div className="flex items-center justify-between p-6 bg-background rounded-xl border border-border hover:border-primary/50 transition-all duration-300">
-                <div>
-                  <p className="font-semibold text-foreground mb-2 text-lg">Push Notifications</p>
-                  <p className="text-muted-foreground">Receive notifications about your ideas and analysis updates</p>
-                </div>
-                <button
-                  onClick={() => setNotifications(!notifications)}
-                  className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
-                    notifications ? 'bg-primary' : 'bg-muted'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-                      notifications ? 'translate-x-7' : 'translate-x-1'
+      <main className="max-w-5xl mx-auto px-6 py-12">
+        <div className="flex flex-col md:flex-row gap-12">
+          
+          {/* Sidebar Navigation */}
+          <div className="w-full md:w-64 space-y-8">
+            <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
+            <nav className="flex flex-col gap-1">
+              {tabItems.map((item) => {
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative ${
+                      isActive 
+                        ? 'text-primary' 
+                        : isDarkMode 
+                          ? 'text-zinc-400 hover:text-white hover:bg-white/5' 
+                          : 'text-zinc-500 hover:text-black hover:bg-zinc-100'
                     }`}
-                  />
-                </button>
-              </div>
+                  >
+                    {/* Active State Vertical Bar */}
+                    {isActive && (
+                      <div className="absolute left-0 w-1 h-4 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary),0.5)]" />
+                    )}
+                    
+                    <item.icon className={`w-4 h-4 transition-colors ${
+                      isActive ? 'text-primary' : 'group-hover:text-current'
+                    }`} />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
 
-              {/* Email Updates */}
-              <div className="flex items-center justify-between p-6 bg-background rounded-xl border border-border hover:border-primary/50 transition-all duration-300">
-                <div>
-                  <p className="font-semibold text-foreground mb-2 text-lg">Email Updates</p>
-                  <p className="text-muted-foreground">Get weekly insights and platform updates delivered to your inbox</p>
+          {/* Content Area */}
+          <div className="flex-1 space-y-10">
+            
+            {/* Appearance Section */}
+            {activeTab === 'appearance' && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className={`pb-4 border-b ${isDarkMode ? 'border-white/10' : 'border-zinc-200'}`}>
+                  <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>Appearance</h3>
+                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>Customize your visual workspace.</p>
                 </div>
-                <button
-                  onClick={() => setEmailUpdates(!emailUpdates)}
-                  className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
-                    emailUpdates ? 'bg-primary' : 'bg-muted'
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-                      emailUpdates ? 'translate-x-7' : 'translate-x-1'
-                    }`}
-                  />
-                </button>
+                
+                <div className={`flex items-center justify-between p-6 rounded-3xl border transition-all duration-500 ${
+                  isDarkMode ? 'border-white/5 bg-[#0A0A0A]' : 'border-zinc-200 bg-white shadow-sm'
+                }`}>
+                  <div className="flex items-center gap-4">
+                    <div className={`p-3 rounded-2xl transition-colors duration-500 ${
+                      isDarkMode ? 'bg-white/5 text-primary' : 'bg-zinc-100 text-primary'
+                    }`}>
+                      {isDarkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5 text-orange-500" />}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold">Dark Mode</p>
+                      <p className="text-xs opacity-50">Switch between light and dark themes.</p>
+                    </div>
+                  </div>
+                  <Toggle enabled={isDarkMode} onChange={toggleDarkMode} />
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Billing Section */}
+            {activeTab === 'billing' && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className={`pb-4 border-b ${isDarkMode ? 'border-white/10' : 'border-zinc-200'}`}>
+                  <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>Billing & Plan</h3>
+                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>Manage your subscription.</p>
+                </div>
+
+                <div className={`relative group p-8 rounded-[2.5rem] border transition-all overflow-hidden ${
+                  isDarkMode ? 'border-primary/30 bg-gradient-to-br from-primary/10 to-transparent' : 'border-primary/20 bg-primary/5'
+                }`}>
+                  <Zap className="absolute -top-6 -right-6 w-32 h-32 text-primary opacity-10 group-hover:scale-110 transition-transform duration-700" />
+                  <div className="relative z-10">
+                    <span className="px-3 py-1 rounded-full bg-primary/20 text-primary text-[10px] font-black uppercase tracking-widest">Active Plan</span>
+                    <h4 className="text-4xl font-black mt-4 mb-2">Free Tier</h4>
+                    <ul className="space-y-2 mb-8 text-sm opacity-70">
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-primary" /> 3 AI Analyses per month</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-primary" /> Standard Generation Speed</li>
+                    </ul>
+                    <button className="px-8 py-3 bg-primary text-white font-bold rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-primary/25">
+                      Upgrade to Pro
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Notifications Section */}
+            {activeTab === 'notifications' && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className={`pb-4 border-b ${isDarkMode ? 'border-white/10' : 'border-zinc-200'}`}>
+                  <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>Notifications</h3>
+                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>Configure your alerts.</p>
+                </div>
+
+                <div className="space-y-3">
+                  {[
+                    { id: 'analysis', title: 'Analysis Completions', desc: 'Alerts when your AI reports are ready.' },
+                    { id: 'security', title: 'Security Alerts', desc: 'Critical account and login notifications.' },
+                  ].map((notif) => (
+                    <div key={notif.id} className={`flex items-center justify-between p-6 rounded-3xl border transition-all ${
+                      isDarkMode ? 'border-white/5 bg-[#0A0A0A]' : 'border-zinc-200 bg-white shadow-sm'
+                    }`}>
+                      <div>
+                        <p className="text-sm font-bold">{notif.title}</p>
+                        <p className="text-xs opacity-50">{notif.desc}</p>
+                      </div>
+                      <Toggle 
+                        enabled={notifications[notif.id as keyof typeof notifications]} 
+                        onChange={() => setNotifications({...notifications, [notif.id]: !notifications[notif.id as keyof typeof notifications]})} 
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Security Section */}
+            {activeTab === 'security' && (
+              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className={`pb-4 border-b ${isDarkMode ? 'border-white/10' : 'border-zinc-200'}`}>
+                  <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>Security & Privacy</h3>
+                  <p className={`text-sm mt-1 ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>Legal and data protection.</p>
+                </div>
+                
+                <div className="grid grid-cols-1 gap-4">
+                  {[
+                    { icon: FileText, label: 'Terms of Service', sub: 'Legal Terms' },
+                    { icon: Lock, label: 'Privacy Policy', sub: 'Data Usage' }
+                  ].map((doc, i) => (
+                    <button key={i} className={`flex items-center justify-between p-6 rounded-3xl border group transition-all ${
+                      isDarkMode ? 'border-white/5 bg-[#0A0A0A] hover:border-primary/30' : 'border-zinc-200 bg-white shadow-sm hover:border-primary/30'
+                    }`}>
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-primary/10 rounded-2xl group-hover:bg-primary group-hover:text-white transition-all">
+                          <doc.icon className="w-5 h-5" />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-sm font-bold">{doc.label}</p>
+                          <p className="text-[10px] uppercase tracking-wider opacity-40 font-bold">{doc.sub}</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 opacity-20 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </button>
+                  ))}
+                </div>
+
+                <div className="pt-8">
+                   <div className={`p-8 rounded-[2rem] border transition-all ${isDarkMode ? 'border-red-500/10 bg-red-500/5' : 'border-red-200 bg-red-50'}`}>
+                    <p className="text-sm opacity-60 mb-6">Once deleted, your startup ideas and analysis history are gone forever.</p>
+                    <button className="flex items-center gap-2 px-6 py-3 bg-red-500 text-white text-xs font-bold rounded-xl hover:bg-red-600 transition-all">
+                      <Trash2 className="w-4 h-4" /> Delete Account
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
-
-          {/* Appearance */}
-          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <Palette className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold text-foreground">Appearance</h2>
-            </div>
-
-            <div className="flex items-center justify-between p-6 bg-background rounded-xl border border-border hover:border-primary/50 transition-all duration-300">
-              <div>
-                <p className="font-semibold text-foreground mb-2 text-lg">Dark Mode</p>
-                <p className="text-muted-foreground">Toggle between light and dark theme for better viewing comfort</p>
-              </div>
-
-              <button
-                onClick={toggleDarkMode}
-                className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
-                  isDarkMode ? 'bg-primary' : 'bg-muted'
-                }`}
-              >
-                <span
-                  className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
-                    isDarkMode ? 'translate-x-7' : 'translate-x-1'
-                  }`}
-                />
-              </button>
-            </div>
-          </div>
-
-          {/* Privacy */}
-          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <Shield className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold text-foreground">Privacy & Security</h2>
-            </div>
-
-            <div className="space-y-4">
-              <button className="w-full text-left px-6 py-4 text-foreground hover:bg-accent rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-primary transition-colors">Change Password</p>
-                <p className="text-muted-foreground">Update your account password and security settings</p>
-              </button>
-
-              <button className="w-full text-left px-6 py-4 text-foreground hover:bg-accent rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-primary transition-colors">Two-Factor Authentication</p>
-                <p className="text-muted-foreground">Add an extra layer of security to protect your account</p>
-              </button>
-
-              <button className="w-full text-left px-6 py-4 text-foreground hover:bg-accent rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-primary transition-colors">Privacy Settings</p>
-                <p className="text-muted-foreground">Manage your data and privacy preferences</p>
-              </button>
-            </div>
-          </div>
-
-          {/* Support */}
-          <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="p-3 bg-primary/10 rounded-xl">
-                <HelpCircle className="w-6 h-6 text-primary" />
-              </div>
-              <h2 className="text-2xl font-bold text-foreground">Support</h2>
-            </div>
-
-            <div className="space-y-4">
-              <button className="w-full text-left px-6 py-4 text-foreground hover:bg-accent rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-primary transition-colors">Help Center</p>
-                <p className="text-muted-foreground">Get help with using the platform and find answers</p>
-              </button>
-
-              <button className="w-full text-left px-6 py-4 text-foreground hover:bg-accent rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-primary transition-colors">Contact Support</p>
-                <p className="text-muted-foreground">Reach out to our support team for assistance</p>
-              </button>
-
-              <button className="w-full text-left px-6 py-4 text-foreground hover:bg-accent rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-primary transition-colors">FAQ</p>
-                <p className="text-muted-foreground">Frequently asked questions and common issues</p>
-              </button>
-            </div>
-          </div>
-
-          {/* Danger Zone */}
-          <div className="bg-destructive/10 backdrop-blur-sm border border-destructive/20 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="p-3 bg-destructive/20 rounded-xl">
-                <Shield className="w-6 h-6 text-destructive" />
-              </div>
-              <h2 className="text-2xl font-bold text-destructive">Danger Zone</h2>
-            </div>
-
-            <div className="space-y-4">
-              <button className="w-full text-left px-6 py-4 text-destructive hover:bg-destructive/20 rounded-xl transition-all duration-300 group hover:shadow-lg hover:-translate-y-1">
-                <p className="font-semibold text-lg group-hover:text-destructive/80 transition-colors">Delete Account</p>
-                <p className="text-destructive/70">Permanently delete your account and all associated data</p>
-              </button>
-            </div>
-          </div>
-
-        </div> {/* END MAIN WRAPPER */}
-
-      </div>
+        </div>
+      </main>
     </div>
   )
 }

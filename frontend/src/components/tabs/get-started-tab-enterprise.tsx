@@ -338,55 +338,45 @@ useEffect(() => {
     <div className="flex-1 flex-col max-h-screen bg-background">
       
       {/* Empty State */}
-      {messages.length === 0 && (
-        <div className="flex-1 flex items-center justify-center p-8">
-          <div className="text-center max-w-2xl">
-            <div className="mb-8">
-              <div className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                <Brain className="h-12 w-12 text-primary" />
-              </div>
-              <h1 className="text-4xl font-bold text-foreground mb-4">
-                Hey {userName || 'there'}!
-              </h1>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-lg mx-auto">
-                Validate your startup idea with AI-powered market analysis
-              </p>
-              
-              {/* Example Prompts */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
-                  Get Started With Examples
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {examplePrompts.map((prompt, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setInputValue(`${prompt.title}: ${prompt.description}`)}
-                      className={`
-                        p-4 bg-card border-2 border-border rounded-xl hover:shadow-lg hover:-translate-y-1 text-left group animate-fade-in
-                        transition-all duration-300 ease-out
-                      `}
-                      style={{ animationDelay: `${index * 100}ms` }}
-                    >
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="font-medium text-foreground">{prompt.title}</span>
-                        <div className={`
-                          w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300
-                          border-2 border-border
-                          group-hover:border-primary group-hover:bg-primary/10
-                        `}>
-                          <Send className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{prompt.description}</p>
-                    </button>
-                  ))}
+{messages.length === 0 && (
+  <div className="flex-1 flex items-center justify-center p-8">
+    <div className="text-center max-w-2xl w-full">
+      <div className="mb-8 pt-12">
+        <h1 className="text-4xl font-bold text-foreground mb-6 tracking-tight">
+          Hey {userName || 'there'}!
+        </h1>
+        <p className="text-base text-muted-foreground mb-10 leading-relaxed max-w-none mx-auto">
+          Validate your startup idea with AI-powered market analysis
+        </p>
+        
+        {/* Example Prompts */}
+        <div className="space-y-6">
+          <h3 className="text-sm font-semibold text-foreground/60 uppercase tracking-[0.2em] mb-6">
+            Get Started With Examples
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {examplePrompts.map((prompt, index) => (
+              <button
+                key={index}
+                onClick={() => setInputValue(`${prompt.title}: ${prompt.description}`)}
+                className="p-5 bg-card border-2 border-border rounded-2xl hover:shadow-xl hover:-translate-y-1 text-left group animate-fade-in transition-all duration-300 ease-out"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-bold text-foreground">{prompt.title}</span>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center border border-border group-hover:border-primary group-hover:bg-primary/10 transition-all">
+                    <Send className="h-3.5 w-3.5 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
                 </div>
-              </div>
-            </div>
+                <p className="text-sm text-muted-foreground leading-snug">{prompt.description}</p>
+              </button>
+            ))}
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Analysis Progress */}
       {isAnalyzing && (
