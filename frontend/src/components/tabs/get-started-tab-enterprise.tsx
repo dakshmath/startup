@@ -5,6 +5,7 @@ import { Send, Brain, Loader2, TrendingUp, BarChart3, Target, AlertCircle, Rotat
 import { ideasApi, chatApi } from '@/lib/api'
 import { useToast } from '@/hooks/use-toast'
 import { useRef } from 'react'
+import { firebaseAuth } from '@/lib/firebase'
 
 
 interface Message {
@@ -34,8 +35,21 @@ export function GetStartedTabEnterprise() {
   const [error, setError] = useState('')
   const { toast } = useToast()
   const [isRecording, setIsRecording] = useState(false)
+  const [userName, setUserName] = useState('')
   const recognitionRef = useRef<any>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Get current user's name
+  useEffect(() => {
+    const currentUser = firebaseAuth.getCurrentUser()
+    if (currentUser?.displayName) {
+      setUserName(currentUser.displayName)
+    } else if (currentUser?.email) {
+      // Use email part before @ if no display name
+      const emailName = currentUser.email.split('@')[0]
+      setUserName(emailName.charAt(0).toUpperCase() + emailName.slice(1))
+    }
+  }, [])
 
 
 const TypingIndicator = ({ stage }: { stage?: string }) => {
@@ -332,11 +346,10 @@ useEffect(() => {
                 <Brain className="h-12 w-12 text-primary" />
               </div>
               <h1 className="text-4xl font-bold text-foreground mb-4">
-                AI Market Intelligence
+                Hey {userName || 'there'}!
               </h1>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-lg mx-auto">
-                Transform your startup idea into actionable insights with comprehensive market analysis, 
-                competitive research, and strategic recommendations.
+                Validate your startup idea with AI-powered market analysis
               </p>
               
               {/* Example Prompts */}

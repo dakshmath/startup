@@ -47,6 +47,8 @@ export default function Home() {
   const [selectedConversation, setSelectedConversation] = useState<string | number | null>(null) 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [userName, setUserName] = useState('')
+  const [userPhotoURL, setUserPhotoURL] = useState<string | null>(null)
   const [isSignUp, setIsSignUp] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
@@ -72,6 +74,9 @@ export default function Home() {
           if (mounted) {
             localStorage.setItem('firebase_token', token)
             setIsAuthenticated(true)
+            // Set user profile data
+            setUserName(user.displayName || user.email?.split('@')[0] || '')
+            setUserPhotoURL(user.photoURL || null)
           }
         } catch (error) {
           console.error('Error getting token:', error)
@@ -81,6 +86,8 @@ export default function Home() {
         if (mounted) {
           localStorage.removeItem('firebase_token')
           setIsAuthenticated(false)
+          setUserName('')
+          setUserPhotoURL(null)
         }
       }
     })
@@ -418,9 +425,19 @@ export default function Home() {
               <div className="h-3 w-[1px] bg-border" />
               <button 
                 onClick={() => router.push('/profile')} 
-                className="bg-foreground text-background px-4 py-1.5 rounded-full text-[10px] font-black uppercase hover:opacity-80 transition-all"
+                className="relative w-8 h-8 rounded-full overflow-hidden border border-border hover:border-primary transition-all hover:scale-105 bg-background border-[1px]"
               >
-                Account
+                {userPhotoURL ? (
+                  <img src={userPhotoURL} alt="Profile" className="w-full h-full object-cover" />
+                ) : userName ? (
+                  <div className="w-full h-full bg-background text-foreground flex items-center justify-center text-sm font-semibold border border-border border-[1px]">
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                ) : (
+                  <div className="w-full h-full bg-muted text-muted-foreground flex items-center justify-center">
+                    <User className="w-4 h-4" />
+                  </div>
+                )}
               </button>
             </div>
           </header>
@@ -452,7 +469,7 @@ export default function Home() {
           {/* PRICING TAB */}
           {activeTab === 'pricing' && (
             <div className="flex-1 overflow-hidden px-6 pb-6">
-              <div className="max-w-7xl mx-auto h-full overflow-y-auto custom-scrollbar">
+              <div className="max-w-7xl mx-auto h-full custom-scrollbar-wrapper">
                 <PricingCards />
               </div>
             </div>

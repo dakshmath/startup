@@ -42,3 +42,56 @@
 .green-glow {
   box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.4);
 }
+
+/* Custom Scrollbar Styles */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  overflow-x: hidden;
+}
+
+.custom-scrollbar-wrapper {
+  position: relative;
+  padding-right: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.custom-scrollbar-wrapper::-webkit-scrollbar {
+  width: 8px;
+  position: absolute;
+  right: 12px;
+}
+
+.custom-scrollbar-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.custom-scrollbar-wrapper::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: all 0.2s ease;
+}
+
+.custom-scrollbar-wrapper::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+  background-clip: content-box;
+}
+
+.custom-scrollbar-wrapper::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Dark mode scrollbar adjustments */
+.dark .custom-scrollbar-wrapper::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.4);
+  background-clip: content-box;
+}
+
+.dark .custom-scrollbar-wrapper::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.6);
+  background-clip: content-box;
+}

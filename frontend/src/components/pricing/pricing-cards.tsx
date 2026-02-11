@@ -281,7 +281,7 @@ export function PricingCards() {
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null)
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto custom-scrollbar">
       {/* Header */}
       <div className="text-center mb-16">
         <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
