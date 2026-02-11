@@ -306,7 +306,7 @@ export default function Home() {
   }
 
   return (
-    <div className="h-screen flex bg-background text-foreground overflow-hidden font-sans relative">
+    <div className="h-screen flex bg-background text-foreground overflow-hidden relative">
       
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
