@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Sparkles, Settings, User } from 'lucide-react'
+import { Settings, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface NavbarProps {
@@ -17,22 +17,18 @@ export function Navbar({ activeTab, setActiveTab, tabs, userName, userPhotoURL }
 
   return (
     <div className="absolute top-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
-      <header className="flex items-center justify-between px-6 py-2 bg-background/60 backdrop-blur-xl border border-border rounded-full w-[90%] max-w-4xl pointer-events-auto shadow-2xl">
-        <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 bg-foreground rounded-lg flex items-center justify-center">
-            <Sparkles className="h-3.5 w-3.5 text-background" />
-          </div>
-          <span className="text-[13px] font-black tracking-tighter text-foreground uppercase italic">StartupName</span>
-        </div>
+      <header className="flex items-center justify-between px-8 py-2 bg-background/60 backdrop-blur-xl border border-border rounded-full w-[55%] max-w-4xl pointer-events-auto shadow-2xl">
+        
+        <div className="w-10 hidden md:block" />
 
         <nav className="flex items-center space-x-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider transition-all ${
+              className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
                 activeTab === tab.id
-                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  ? 'text-[#4ade80] scale-105'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
@@ -41,19 +37,25 @@ export function Navbar({ activeTab, setActiveTab, tabs, userName, userPhotoURL }
           ))}
         </nav>
 
-        <div className="flex-center flex items-center space-x-3">
-          <button onClick={() => router.push('/settings')} className="text-muted-foreground hover:text-foreground transition-colors">
+        {/* User Actions */}
+        <div className="flex items-center space-x-3 shrink-0">
+          <button 
+            onClick={() => router.push('/settings')} 
+            className="p-2 text-muted-foreground hover:text-primary transition-colors rounded-full flex items-center justify-center"
+          >
             <Settings className="h-4 w-4" />
           </button>
-          <div className="h-3 w-[1px] bg-border" />
+          
+          <div className="h-4 w-[1px] bg-border/60" />
+          
           <button 
             onClick={() => router.push('/profile')} 
-            className="relative w-8 h-8 rounded-full overflow-hidden border border-border hover:border-primary transition-all hover:scale-105 bg-background"
+            className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-border hover:border-primary transition-all active:scale-95 bg-muted flex items-center justify-center"
           >
             {userPhotoURL ? (
               <img src={userPhotoURL} alt="Profile" className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-sm font-semibold">
+              <div className="w-full h-full flex items-center justify-center text-[11px] font-black text-foreground">
                 {userName ? userName.charAt(0).toUpperCase() : <User className="w-4 h-4" />}
               </div>
             )}

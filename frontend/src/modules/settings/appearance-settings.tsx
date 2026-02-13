@@ -1,4 +1,5 @@
 'use client'
+
 import React from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
@@ -18,22 +19,25 @@ export function AppearanceSettings({ isDarkMode, toggleDarkMode }: AppearanceSet
 
       <div className="flex items-center justify-between p-2">
         <div className="flex items-center gap-4">
-          <div className={`p-3 rounded-2xl transition-colors ${
-            isDarkMode ? 'bg-white/5 text-primary' : 'bg-zinc-50 text-orange-500'
+          <div className={`p-3 rounded-2xl transition-all duration-300 ${
+            isDarkMode ? 'bg-indigo-500/10 text-indigo-400' : 'bg-orange-500/10 text-orange-500'
           }`}>
             {isDarkMode ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
           </div>
           <div>
-            <p className="text-sm font-bold text-foreground">Dark Mode</p>
-            <p className="text-xs text-muted-foreground">Switch between light and dark themes.</p>
+            <p className="text-sm font-bold text-foreground">
+              {isDarkMode ? 'Dark Mode' : 'Light Mode'}
+            </p>
+            <p className="text-xs text-muted-foreground whitespace-nowrap">
+              Switch between light and dark themes.
+            </p>
           </div>
         </div>
-        {/* Wrapper forces a visible grey track in light mode */}
-        <div className={!isDarkMode ? '[&>button]:bg-zinc-300 [&>button]:border [&>button]:border-zinc-400' : ''}>
+
+        <div className="flex items-center">
           <Switch
             checked={isDarkMode}
             onCheckedChange={toggleDarkMode}
-            className="data-[state=checked]:bg-primary"
           />
         </div>
       </div>

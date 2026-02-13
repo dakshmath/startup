@@ -1,7 +1,7 @@
 'use client'
 
-import React from 'react'
-import { Sparkles, Plus } from 'lucide-react'
+import React, { useState } from 'react'
+import { Menu, SquarePen, Search, X } from 'lucide-react'
 
 interface Conversation {
   id: string | number;
@@ -12,57 +12,127 @@ interface Conversation {
 
 interface SidebarProps {
   sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
   pastChats: Conversation[];
   selectedConversation: string | number | null;
   setSelectedConversation: (id: string | number | null) => void;
-  setActiveTab: (tab: 'chat' | 'intelligence' | 'pricing') => void;
+  setActiveTab: (tab: 'chat' | 'intelligence' | 'pricing' | 'support') => void;
+  onSearch?: (query: string) => void;
 }
 
 export function Sidebar({ 
   sidebarOpen, 
+  setSidebarOpen,
   pastChats, 
   selectedConversation, 
   setSelectedConversation,
-  setActiveTab 
+  setActiveTab,
+  onSearch
 }: SidebarProps) {
+  const [isSearching, setIsSearching] = useState(false);
+
   return (
     <aside className={`h-full transition-all duration-300 bg-card border-r border-border overflow-hidden flex-shrink-0 ${
-      sidebarOpen ? 'w-64 opacity-100' : 'w-0 opacity-0 pointer-events-none'
+      sidebarOpen ? 'w-64' : 'w-[68px]'
     }`}>
       <div className="w-64 h-full flex flex-col">
-        <div className="p-6 flex items-center space-x-3">
-          <div className="w-6 h-6 bg-foreground rounded flex items-center justify-center">
-            <Sparkles className="w-4 h-4 text-background" />
-          </div>
-          <span className="text-sm font-bold tracking-tighter uppercase italic">StartupName</span>
+        
+        {/* Header Area */}
+        <div className="h-16 flex items-center relative px-5">
+          {!isSearching ? (
+            <>
+              <button 
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+              >
+                <Menu size={22} strokeWidth={1.5} />
+              </button>
+
+              <button 
+                onClick={() => {
+                  if (!sidebarOpen) setSidebarOpen(true);
+                  setIsSearching(true);
+                }}
+                className={`absolute right-5 p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-all duration-300 ${
+                  sidebarOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none'
+                }`}
+              >
+                <Search size={20} strokeWidth={1.5} /> 
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center w-full animate-in fade-in duration-200">
+              <input 
+                autoFocus
+                type="text"
+                placeholder="Search..."
+                onChange={(e) => onSearch?.(e.target.value)}
+                className="w-full bg-transparent border-none outline-none text-sm pr-8"
+              />
+              <button 
+                onClick={() => {
+                  setIsSearching(false);
+                  onSearch?.('');
+                }}
+                className="absolute right-0 p-2 text-muted-foreground hover:text-foreground"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="px-4 mb-4">
+        {/* New Chat Button */}
+        <div className="px-5 mt-2">
           <button
             onClick={() => {
               setSelectedConversation(null);
               setActiveTab('chat');
+              setIsSearching(false);
+              onSearch?.('');
             }}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-all font-bold"
+            className="group flex items-center w-full py-2 text-muted-foreground hover:text-foreground transition-all duration-200"
           >
-            <Plus className="h-4 w-4" />
-            <span className="text-[12px]">New Idea</span>
+            <div className="p-2 group-hover:bg-accent rounded-lg transition-colors flex-shrink-0">
+              <SquarePen size={22} strokeWidth={1.5} />
+            </div>
+            
+            <span className={`ml-2 text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+              sidebarOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 pointer-events-none'
+            }`}>
+              New idea
+            </span>
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-3 custom-scrollbar">
-          <h3 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-4 px-3">History</h3>
+        {/* History Area */}
+        <div className="flex-1 overflow-y-auto mt-6 custom-scrollbar px-5">
+          <div className={`px-2 mb-4 transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0'}`}>
+            <h3 className="text-[11px] font-bold text-muted-foreground/50 uppercase tracking-widest">
+              Past startups
+            </h3>
+          </div>
+          
           <div className="space-y-1">
             {pastChats.map((conversation) => (
               <button
                 key={conversation.id}
                 onClick={() => setSelectedConversation(conversation.id)}
-                className={`w-full text-left p-3 rounded-xl transition-all ${
-                  selectedConversation === conversation.id ? 'bg-accent border border-border' : 'hover:bg-accent/50'
+                className={`w-full group flex items-center py-2 rounded-xl transition-all duration-200 ${
+                  selectedConversation === conversation.id ? 'bg-accent/40' : 'hover:bg-accent/20'
                 }`}
               >
-                <h4 className="text-[12px] font-bold text-foreground truncate">{conversation.title}</h4>
-                <p className="text-[10px] text-muted-foreground line-clamp-1">{conversation.preview}</p>
+                <div className="w-10 flex-shrink-0 flex items-center justify-center">
+                  <div className={`w-1.5 h-1.5 rounded-full transition-all ${
+                    selectedConversation === conversation.id ? 'bg-primary scale-125' : 'bg-muted-foreground/20'
+                  }`} />
+                </div>
+
+                {sidebarOpen && (
+                  <div className="ml-1 overflow-hidden pr-2 text-left animate-in fade-in duration-500">
+                    <h4 className="text-[13px] font-medium text-foreground truncate">{conversation.title}</h4>
+                  </div>
+                )}
               </button>
             ))}
           </div>
