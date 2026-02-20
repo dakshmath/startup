@@ -2,49 +2,95 @@
 
 import React from 'react'
 import { FileJson, ChevronRight, LogOut } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 
 interface SecuritySectionProps {
   handleLogout: () => void
   isDarkMode: boolean
 }
 
-export function SecuritySection({ handleLogout, isDarkMode }: SecuritySectionProps) {
+export function SecuritySection({ handleLogout }: SecuritySectionProps) {
   return (
-    <section className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className={`pb-4 border-b ${isDarkMode ? 'border-white/10' : 'border-zinc-200'}`}>
-        <h3 className="text-xl font-bold">Account Security</h3>
-        <p className="text-sm opacity-60 mt-1">Manage your access and data privacy.</p>
+    <section style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+
+      {/* Header */}
+      <div style={{ paddingBottom: '16px', borderBottom: '1px solid hsl(var(--border))' }}>
+        <h3 style={{ fontSize: '18px', fontWeight: 900, color: 'hsl(var(--foreground))', margin: '0 0 4px 0' }}>
+          Account Security
+        </h3>
+        <p style={{ fontSize: '13px', color: 'hsl(var(--muted-foreground))', margin: 0 }}>
+          Manage your access and data privacy.
+        </p>
       </div>
 
-      <div className="space-y-4">
-        <button className={`w-full flex items-center justify-between p-6 rounded-3xl border transition-all group ${
-          isDarkMode ? 'bg-[#0A0A0A] border-white/5 hover:border-primary/40' : 'bg-white border-zinc-200 hover:border-primary/40 shadow-sm'
-        }`}>
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-primary/10 rounded-2xl text-primary">
-              <FileJson className="w-5 h-5" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+        {/* Export */}
+        <button
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '20px 24px',
+            backgroundColor: 'hsl(var(--card))',
+            border: '1.5px solid hsl(var(--border))',
+            borderRadius: '20px',
+            cursor: 'pointer',
+            textAlign: 'left',
+          }}
+          onMouseEnter={e => e.currentTarget.style.borderColor = 'hsl(var(--foreground) / 0.3)'}
+          onMouseLeave={e => e.currentTarget.style.borderColor = 'hsl(var(--border))'}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <div style={{ padding: '10px', backgroundColor: 'hsl(var(--primary) / 0.1)', borderRadius: '12px' }}>
+              <FileJson size={18} style={{ color: 'hsl(var(--primary))' }} />
             </div>
-            <div className="text-left">
-              <p className="text-sm font-bold">Export Workspace</p>
-              <p className="text-xs opacity-50">Download all your data as JSON.</p>
+            <div>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: 'hsl(var(--foreground))', margin: '0 0 2px 0' }}>
+                Export Workspace
+              </p>
+              <p style={{ fontSize: '12px', color: 'hsl(var(--muted-foreground))', margin: 0 }}>
+                Download all your data as JSON.
+              </p>
             </div>
           </div>
-          <ChevronRight className="w-4 h-4 opacity-20 group-hover:translate-x-1 group-hover:opacity-100 transition-all" />
+          <ChevronRight size={16} style={{ color: 'hsl(var(--muted-foreground))', opacity: 0.4 }} />
         </button>
 
-        <div className={`p-8 rounded-[2rem] border transition-all ${
-          isDarkMode ? 'border-red-500/10 bg-red-500/5' : 'border-red-200 bg-red-50'
-        }`}>
-          <h4 className="text-xs font-black text-red-500 uppercase tracking-widest mb-4">Account Management</h4>
-          <p className="text-sm opacity-60 mb-6 font-medium">Signing out will end your current session. You will need to log back in to access your projects.</p>
-          <Button 
-            variant="destructive"
+        {/* Sign out */}
+        <div style={{
+          padding: '28px',
+          borderRadius: '20px',
+          border: '1.5px solid hsl(0 84% 60% / 0.15)',
+          backgroundColor: 'hsl(0 84% 60% / 0.05)',
+        }}>
+          <h4 style={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.13em', color: 'hsl(0 84% 60%)', margin: '0 0 12px 0' }}>
+            Account Management
+          </h4>
+          <p style={{ fontSize: '13px', color: 'hsl(var(--muted-foreground))', margin: '0 0 20px 0', lineHeight: 1.6 }}>
+            Signing out will end your current session. You will need to log back in to access your projects.
+          </p>
+          <button
             onClick={handleLogout}
-            className="flex items-center gap-2 px-6 py-3 bg-red-500 text-white text-xs font-bold rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-red-500/20"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 20px',
+              backgroundColor: 'hsl(0 84% 60%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '12px',
+              fontWeight: 900,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+            }}
           >
-            <LogOut className="w-4 h-4" /> Sign Out
-          </Button>
+            <LogOut size={14} />
+            Sign Out
+          </button>
         </div>
       </div>
     </section>

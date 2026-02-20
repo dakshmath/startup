@@ -7,47 +7,32 @@ interface ThemeContextType {
   toggleDarkMode: () => void
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+const ThemeContext = createContext<ThemeContextType>({
+  isDarkMode: false,
+  toggleDarkMode: () => {},
+})
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [isDarkMode, setIsDarkMode] = useState<boolean | null>(null)
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
-  // Load theme BEFORE first paint
   useEffect(() => {
-    const savedTheme = localStorage.getItem('darkMode')
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const saved = localStorage.getItem('evo-theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const shouldBeDark = saved ? saved === 'dark' : prefersDark
 
-    if (savedTheme !== null) {
-      setIsDarkMode(savedTheme === 'true')
-    } else {
-      setIsDarkMode(systemDark)
-    }
+    document.documentElement.classList.toggle('dark', shouldBeDark)
+    setIsDarkMode(shouldBeDark)
   }, [])
 
-  // Apply theme + persist
-  useEffect(() => {
-    if (isDarkMode === null) return
-
-    const root = document.documentElement
-
-    if (isDarkMode) {
-      root.classList.add('dark')
-    } else {
-      root.classList.remove('dark')
-    }
-
-    localStorage.setItem('darkMode', String(isDarkMode))
-  }, [isDarkMode])
-
   const toggleDarkMode = () => {
-    if (isDarkMode !== null) {
-      setIsDarkMode(!isDarkMode)
-    }
-  }
+    setIsDarkMode((prev) => {
+      const next = !prev
 
-  // Prevent rendering until theme is known
-  if (isDarkMode === null) {
-    return <div className="min-h-screen bg-background" />
+      document.documentElement.classList.toggle('dark', next)
+      localStorage.setItem('evo-theme', next ? 'dark' : 'light')
+
+      return next
+    })
   }
 
   return (
@@ -57,10 +42,4 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function useTheme() {
-  const context = useContext(ThemeContext)
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider')
-  }
-  return context
-}
+export const useTheme = () => useContext(ThemeContext)

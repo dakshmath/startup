@@ -5,7 +5,7 @@ from app.core.config import settings
 from app.core.database import init_db
 
 app = FastAPI(
-    title="Market Intelligence Platform",
+    title="Evo AI",
     description="AI-powered market analysis for startup ideas",
     version="1.0.0"
 )

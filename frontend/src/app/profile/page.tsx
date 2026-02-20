@@ -68,12 +68,8 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 ${
-      isDarkMode ? 'bg-[#050505] text-white' : 'bg-zinc-50 text-zinc-900'
-    }`}>
-      <nav className={`border-b sticky top-0 z-50 transition-colors duration-500 ${
-        isDarkMode ? 'border-white/5 bg-black/50 backdrop-blur-xl' : 'border-zinc-200 bg-white/80 backdrop-blur-xl'
-      }`}>
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+      <nav className="border-b border-border sticky top-0 z-50 bg-background/80 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <button 
             onClick={() => router.push('/')}
@@ -100,17 +96,18 @@ export default function ProfilePage() {
                   <button
                     key={item.id}
                     onClick={() => setActiveTab(item.id)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group relative ${
-                      activeTab === item.id 
-                        ? 'text-primary' 
-                        : isDarkMode 
-                          ? 'text-zinc-400 hover:text-white hover:bg-white/5' 
-                          : 'text-zinc-500 hover:text-black hover:bg-zinc-100'
-                    }`}
+                    className={`
+                      flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+                      transition-all duration-150 text-left relative
+                      ${activeTab === item.id
+                        ? 'bg-muted text-foreground'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                      }
+                    `}
                   >
                     {activeTab === item.id && (
-                      <div className="absolute left-0 w-1 h-4 bg-primary rounded-full" />
-                    )}
+  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-4 bg-foreground rounded-full" />
+)}
                     <item.icon className="w-4 h-4" />
                     {item.label}
                   </button>

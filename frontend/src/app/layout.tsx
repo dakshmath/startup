@@ -12,7 +12,7 @@ const jakarta = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
-  title: 'Market Intelligence Platform',
+  title: 'evo',
   description: 'AI-powered market analysis',
 }
 
@@ -23,6 +23,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Prevent dark mode flicker */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              const t = localStorage.getItem('evo-theme');
+              if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+              }
+            `
+          }}
+        />
+      </head>
       <body className={`${jakarta.className} antialiased`}>
         <ThemeProvider>
           <IdeaProvider>
